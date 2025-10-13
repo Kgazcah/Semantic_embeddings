@@ -5,10 +5,10 @@ from visualization.plotting import Visualization
 import utils
 
 problem = 'software_requirements/no_stopwords'
-n_gram = '1_gray'
+n_gram = '4_gray'
 df = pd.read_csv(f'data/{problem}/dataset.csv')
 code = 'gray'
-bits = 12
+bits = 11
 n_gram_n = int(n_gram[0])
 
 # preprocessing the dataset
@@ -17,6 +17,9 @@ if problem.split('/')[1] == 'stopwords':
 else:
     preprocessed_df = utils.preprocessing(df, 'plus', 'en')
 
+df_preprocessed = pd.DataFrame({'text': preprocessed_df})
+df_preprocessed.to_csv(f'assets/method/{problem}/df_tokenized.csv', index=False)    
+
 #getting the vocabulary, vocab_to_index and vocab_to_binary
 word_to_bin, vocab_to_index, bits = utils.get_vocab_ind_bin(preprocessed_df, output_file=f'assets/method/{problem}', code=code)
 l_grams = utils.get_lambda_grams(preprocessed_df, n_gram_n)
@@ -24,10 +27,21 @@ vocab_size = len(word_to_bin)
 
 #getting the lambda grams to binary embeddings
 utils.lambda_grams_to_binary(word_to_bin, l_grams, f'assets/bin_embeddings/{problem}/{n_gram}_grams/binary_embeddings.csv')
+#### NEEEEEEEEEEEEEEEEEEW 
 
 ################## Splitting into training and testing data 
-utils.split_data(f'assets/bin_embeddings/{problem}/{n_gram}_grams/binary_embeddings.csv', f'data/{problem}/{n_gram}_grams')
 
+utils.split_data(
+    df = df_preprocessed,
+    output_folder = f'data/{problem}/{n_gram}_grams',
+    binary_embeddings_file = f'assets/bin_embeddings/software_requirements/no_stopwords/{n_gram_n}_gray_grams/binary_embeddings.csv',
+    n_gram = n_gram_n,
+    semantic = True
+)
+
+
+# utils.split_data(f'assets/bin_embeddings/{problem}/{n_gram}_grams/binary_embeddings.csv', f'data/{problem}/{n_gram}_grams')
+exit()
 # #################### Loading data to train autoencoder
 #loading training and testing data for 4_grams
 X_train = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/X_train.csv', 'embedding')
@@ -36,20 +50,21 @@ X_val = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/X_val.csv', '
 y_train, y_test, y_val = X_train, X_test, X_val
 
 dictionary = utils.upload_vocab_to_binary_dictionary(file=f'assets/method/{problem}/vocab_to_binary.csv')
-# # ##################### Step 8: Creating and training the Neural Network (Autoencoder)
+# # # ##################### Step 8: Creating and training the Neural Network (Autoencoder)
 
-initialize_weights_file = f'assets/weights/{problem}/{n_gram}_grams/initial_weights.pkl'
-autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1], embedding_size=200, vocab_size=vocab_size)
-autoencoder.save_initialize_weights(initialize_weights_file=initialize_weights_file)
-history = autoencoder.fit(X_train, y_train, X_val, y_val, epochs=200, batch_size=32)
-autoencoder.save(f'assets/models/{problem}/{n_gram}_grams/model_{n_gram}.h5')
+# initialize_weights_file = f'assets/weights/{problem}/{n_gram}_grams/initial_weights.pkl'
+# autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1], embedding_size=200, vocab_size=vocab_size)
+# autoencoder.save_initialize_weights(initialize_weights_file=initialize_weights_file)
+# history = autoencoder.fit(X_train, y_train, X_val, y_val, epochs=300, batch_size=32)
+# autoencoder.save(f'assets/models/{problem}/{n_gram}_grams/model_{n_gram}.h5')
 
-##################### Step 9: Visualizing the training plots
-plot = Visualization()
-plot.plotting_metric(history.history, 'cosine_similarity', 'val_cosine_similarity', path=f'assets/learning_graphs/{problem}/{n_gram}_grams', fig_name='Learning training')
-plot.plotting_loss(history.history, 'loss', 'val_loss', path=f'assets/learning_graphs/{problem}/{n_gram}_grams', fig_name='Loss training')
+# ##################### Step 9: Visualizing the training plots
+# plot = Visualization()
+# plot.plotting_metric(history.history, 'cosine_similarity', 'val_cosine_similarity', path=f'assets/learning_graphs/{problem}/{n_gram}_grams', fig_name='Learning training')
+# plot.plotting_loss(history.history, 'loss', 'val_loss', path=f'assets/learning_graphs/{problem}/{n_gram}_grams', fig_name='Loss training')
 
 ################### Step 10: Predicting
+
 # comment following line if you do not want to predict
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1], vocab_size=vocab_size)
 model = autoencoder.load_model(f'assets/models/{problem}/{n_gram}_grams/model_{n_gram}.h5', vocab_size=vocab_size)

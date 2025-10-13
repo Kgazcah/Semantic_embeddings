@@ -11,24 +11,93 @@ from encoding.lambda_grams import LambdaGrams
 from encoding.lambda_grams_to_indx import LambdaGramsToIndx
 from encoding.binary_embeddings import LambdaGramEmbeddings
 
-#split the original dataset to train
-def split_data (df_folder, output_folder, test_size=0.20, random_state=42, column='embedding'):
-    df = pd.read_csv(df_folder, dtype={column: str})
-    X_train, X_test, y_train, y_test = train_test_split(
-    df, df, test_size=test_size, random_state=random_state)
+# #split the original dataset to train same X, same Y
+# def split_data (df_folder, output_folder, test_size=0.20, random_state=42, column='embedding', semantic=False):
+#     df = pd.read_csv(df_folder, dtype={column: str})
+#     if semantic:
 
-    X_train, X_val, y_train, y_val = train_test_split(
-        X_train, y_train, test_size=0.20, random_state=42)
+#     X_train, X_test, y_train, y_test = train_test_split(
+#     df, df, test_size=test_size, random_state=random_state)
 
-    #as 'y' data must be the same as 'X' data we do not save it in all cases
-    X_train = pd.DataFrame(X_train)
-    X_train.to_csv(f'{output_folder}/X_train.csv', index=False)
+#     X_train, X_val, y_train, y_val = train_test_split(
+#         X_train, y_train, test_size=0.20, random_state=42)
 
-    X_test = pd.DataFrame(X_test)
-    X_test.to_csv(f'{output_folder}/X_test.csv', index=False)
+#     #as 'y' data must be the same as 'X' data we do not save it in all cases
+#     X_train = pd.DataFrame(X_train)
+#     X_train.to_csv(f'{output_folder}/X_train.csv', index=False)
 
-    X_val = pd.DataFrame(X_val)
-    X_val.to_csv(f'{output_folder}/X_val.csv', index=False)
+#     X_test = pd.DataFrame(X_test)
+#     X_test.to_csv(f'{output_folder}/X_test.csv', index=False)
+
+#     X_val = pd.DataFrame(X_val)
+#     X_val.to_csv(f'{output_folder}/X_val.csv', index=False)
+
+def split_data(df, output_folder, binary_embeddings_file,
+               test_size=0.20, random_state=42, n_gram=1, semantic=False):
+
+    emb_df = pd.read_csv(binary_embeddings_file, dtype={'embedding': str})
+    emb_df['lambda_gram'] = emb_df['lambda_gram'].astype(str).str.strip()
+
+    if not semantic:
+        X_train, X_test, y_train, y_test = train_test_split(
+            df, df, test_size=test_size, random_state=random_state)
+        X_train, X_val, y_train, y_val = train_test_split(
+            X_train, y_train, test_size=0.20, random_state=random_state)
+
+        X_train.to_csv(f'{output_folder}/X_train.csv', index=False)
+        X_val.to_csv(f'{output_folder}/X_val.csv', index=False)
+        X_test.to_csv(f'{output_folder}/X_test.csv', index=False)
+
+        return X_train, X_val, X_test, y_train, y_val, y_test
+
+    else:
+        ngram_to_emb = dict(zip(emb_df['lambda_gram'], emb_df['embedding']))
+        pairs = []
+        skipped = 0
+
+        for _, row in df.iterrows():
+            text = str(row['text'])
+            tokens = text.split()
+            n = n_gram
+
+            if len(tokens) <= n:
+                continue
+
+            ngrams = [" ".join(tokens[i:i+n]) for i in range(len(tokens) - n + 1)]
+
+            for i in range(len(ngrams) - 1):
+                x_gram = ngrams[i]
+                y_gram = ngrams[i+1]
+
+                if x_gram in ngram_to_emb and y_gram in ngram_to_emb:
+                    pairs.append((x_gram, ngram_to_emb[x_gram],
+                                  y_gram, ngram_to_emb[y_gram]))
+                else:
+                    skipped += 1
+
+        df_pairs = pd.DataFrame(pairs, columns=['X_text', 'X_emb', 'y_text', 'y_emb'])
+
+        df_pairs.to_csv(f'{output_folder}/all_pairs.csv', index=False)
+
+        print(f"Total pairs: {len(df_pairs)}")
+        print(f"Missing pairs: {skipped}")
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            df_pairs[['X_text', 'X_emb']], df_pairs[['y_text', 'y_emb']],
+            test_size=test_size, random_state=random_state)
+
+        X_train, X_val, y_train, y_val = train_test_split(
+            X_train, y_train, test_size=0.20, random_state=random_state)
+
+        X_train.to_csv(f'{output_folder}/X_train.csv', index=False)
+        X_val.to_csv(f'{output_folder}/X_val.csv', index=False)
+        X_test.to_csv(f'{output_folder}/X_test.csv', index=False)
+        y_train.to_csv(f'{output_folder}/y_train.csv', index=False)
+        y_val.to_csv(f'{output_folder}/y_val.csv', index=False)
+        y_test.to_csv(f'{output_folder}/y_test.csv', index=False)
+
+        return X_train, X_val, X_test, y_train, y_val, y_test
+
 
 #preprocessing the corpus (Builder Pattern)
 def preprocessing(df, type, language='en'):

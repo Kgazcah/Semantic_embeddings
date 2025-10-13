@@ -1,0 +1,536 @@
+text
+transfer shall take place manner data needed perform fourier transform showsup single processor backend tofrom monitor control interface
+shall receive via mc state count data produced correlator data valid counts quantizer power measurement data filter parameters frequency shift parameters windowing parameters observational mode shall receive via mc data parameters specific current evla observational mode needed processing correlator lag values metadata shall receive via mc metadata necessary format results delivery ee operational status
+includes lag frame destination addresses address changes error warning shall provide error warning reports mc operating conditions warrant debugtest messages shall provide several optionally selectable levels printed messages detailing operational parameters critical locations system
+formatted output shall deliver formatted final results ee system
+shall produce data needed ee system archiving processing
+output currently expected form compatible aips measurement sets
+monitor control system shall acknowledge receipt data received mc correlator system shall notify mc detected interruptions data delivery correlator ee shall verify successful delivery output ee internal data shall guarantee safe delivery internal messages lag frames shall able handle lag frames less values lag sets shall able handle lag sets maximum size value
+data receive shall receive incoming data packets correlator backend network interface
+network part system verify receive shall verify successful receipt incoming data correlator
+includes checking receive errors determining expected data received accumulation error statistics comparison tolerances reporting tolerance conditions input data management shall store input data records memory buffer track buffer locations input data data processing complete
+report buffer overflow conditions processing management shall respond incoming correlator mode changes user optional processing sequence andor parameter changes external inputs affect data processing pipeline
+update internal parameter tables synchronize data processing pipeline evla operations system srs new operational conditions time series assembly shall assemble received input data continuous time series lag sets data integrity verification shall ensure time series data correctly ordered contains valid data values along entire extent
+compare tolerances report tolerance conditions data invalid shall replace invalid data zero values data invalid count shall keep track data invalids normalization shall able apply normalizations based reported data invalid counts coarse quantization correction shall able apply corrections based state count andor quantizer power measurement data
+vanvleck correction time stamp adjustment shall able make time stamp adjustments required observational mode correlator output parameters
+arise recirculation used windowing shall able perform windowing operations prior subsequent fourier transform
+needed narrow band rfi mitigation
+post fourier transform windowing applied convolution time domain processing shall able apply user selected time domain processes
+processes constructed chainable output time domain process piped input including replica self fourier transform repeatable chain
+optional time domain processes yet proposed fourier transform processing shall able perform fourier transform lag set time series
+poweroftwo complextocomplex fast fourier transform retention output positive negative frequencies used
+process must able accept input output time domain processes frequency domain processing shall able apply user selected frequency domain processes
+processes constructed chainable output fourier transform frequency domain process piped input frequency domain process including replica self repeatable chain
+frequency domain processes yet proposed integration shall able sum frequency domain spectral results
+amount time duration summation controlled observational mode parameter obtained via mc
+shall keep track number samplesdumps integrated spectral channel
+summation occur optional frequency domain processing none fourier transform
+integration long periods time throttle output correlator rate manageable ee output formatting shall combine finished spectra meta auxiliary data form suitably formatted output data sets
+aips measurement sets expected entities output data management shall store formatted output data records memory buffer backup disk buffering
+store data ready transmission ee system successful transfer occurred
+report errors buffer overflow conditions occur data send shall send output data ee system send verify shall verify sent data successfully received
+report errors monitor io performance shall monitor data transfer rates evla operations system srs correlator ee
+accumulate data transfer statistics compare tolerances
+report tolerance conditions monitor compute performance shall monitor overall data processing rate
+compare tolerances report tolerance conditions monitor compute errors shall trap flag repair infs nans underflows overflows computation errors
+accumulate computation error statistics compare tolerances
+report tolerance conditions monitor processes shall periodically upon request check pids assure started tasks alive running
+report missing stopped defunct damaged processes monitor processors shall periodically upon request check backend physical processors assure needed processors alive responding
+report crashed stopped unresponsive processors monitor networks shall periodically upon request check backend internal networks assure communication connections intact functioning
+report nonfunctioning components start process shall able initiate processing task backend processor stop process shall able signal kill backend process alter priority shall able alter priority tasks reboot processor shall able initiate reboot backend physical processor reboot network shall able initiate reboot internal network offload shall able redistribute
+involve change destination ip addresses correlator network general processes shall violate archive data requirements
+processes shall reversible raw unconverted input always recoverable output data construct specifications req
+input data queue memory buffer lag frames
+data entry status queue track record buffer
+lag frames contain information necessary properly assemble complete lag sets output data queue memory buffer plus backup disk storage processed spectra
+converted output aips measurement set entities prior transfer ee
+data entry status queue track record buffer processing parameters names positions sequence adjustable parameters fixed user selectable processing pipeline applications processing flags table flags needed identify various internal conditions relating error response processing state
+evla operations system srs metadata internally externally generated data processed time series spectra including invalid data flags processes applied coordinates etc error report error number translatable text error message error source error rates applicable time stamp warning report warning number translatable text warning message warning source warning rates applicable time stamp failure report internal system component eg
+disk drive processors processes networks failure number translatable text error message time stamp recovery report internal system component process processor network recovery action result status report internal system component process processor network functional state
+performance requirements data integrity backend system shall maintain input data fidelity dynamic range across processing manipulation io functions error handling system shall capable flagging king corrupted data segments proceeding without interruption effect data
+includes limited partial data zero data underflows overflows infinities nans whether obtained input arising processing hardware req
+input system shall capable accepting aggregate data input stream correlator minimum
+must done simultaneously output stream necessarily interconnects
+initial deployment specification increased time output system shall capable delivering output data stream ee system minimum mbytessec
+includes resends simultaneous transfer data stored due previous ee connection outage
+must done simultaneously output stream necessarily interconnects
+initial deployment specification increased time cpu total processor capability system shall combination numbers processors individual processor speed sufficient accomplish processing tasks avoiding loss delay input output data streams memory system shall sufficient amount tbd memory sufficient rate tbd access speeds accomplish processing tasks avoiding loss delay input output dat
+availability source code os important
+autocorrection backend system shall selfmonitoring
+capable detecting reporting automatically taking action remedy lessen impact minimum following types abnormal conditions processor hardware failure operating system hangs crashes computational performance minimum specifications computational error rates maximum specification internal communications failures external correlator ee communications disruptions software software part system shall able perform withou
+system cache predetermined amount tbd correlator data first encounter unavailable critical data complete requested operations cached data unavailable critical data obtained standby mode system shall able sit idle resume operations minimal amount tbd delay hardware accessibility system processing interconnect hardware shall readily accessible maintenance repair replacement andor reconfiguration software accessibility
+evla operations system srs
+security backend system needs robust security mechanism place unauthorized users allowed access
+authorized users expected restricted software hardware development testing maintenance operations personnel
+users backend system must uniquely identified
+could done via username associated password scheme would authenticate authorize user access system applicable grant user access restricted controlled parts system
+user cannot identified given access
+order monitor past access system attempts access system logged
+users needs expectations system different
+systems operations given unrestricted access aspects system authority grant revoke privileges peruser basis
+development testing maintenance personnel hand require access parts system indicating access level needed allows privileges granted peruser whatdoyouneedtodo basis
+users system shall login using form unique identificationg
+username password login attempts shall done secure mannerg
+encrypted passwords system administrator shall unrestricted access aspects system user shall set system access properties defines users privileges within systemg
+subsystems user control system tools user access administrator shall ability create add new user system administrator shall ability remove user system administrator shall ability edit users system access properties administrator shall ability block access system users selectively user
+blocked users active sessions shall automatically logged
+functionality cctns application focused providing value police personnel especially officers operating cutting edge easing day day operations police function
+registration citizens register complaints police based evidence facts following investigation police shall take complaint forward
+registration module acts interface police citizens eases approach interaction information exchange police complainants
+investigation complaint initiated police initiates investigation process
+investigation module cctns facilitates investigation process introduces operational efficiencies automating tasks take place initial entries made registration
+prosecution interfacing courts prosecution cases integral part responsibilities police personnel
+designated constable police station constantly interfaces courts
+prosecution module cctns aids interfacing providing platform record entries court interactions
+search search module cctns gives police personnel ability execute basic advanced search cases
+using search functionality police personnel search particular person type crime modus operandi property etc
+also gives user ability customize results view criminalaccused cases
+makes reporting easy police enabling execute different types queries monthly reporting rti related etc
+citizen interface citizen interface module cctns acts conduit information exchange citizens police unitspersonnel
+citizens use tool get information acknowledgements police
+police turn use respond citizens little turnaround time
+improves overall productivity helping citizens police cut short drudgery large amounts paperwork
+navigation navigation module cctns provides role based landing pages help navigating cctns application
+shows information cases assigned alerts pending tasks etc hence helping police personnel plan better execute greater efficiency
+application configuration configuration module cctns helps keep application configured according states requirements addition keeping data elementsrules date
+proper configuration information act sections state specific data castes tribes property information etc
+created updated deleted
+functional requirements modules provided arate enclosures
+nonfunctional requirements specify qualitative attributes userfriendliness performance system critical increased useracceptance application
+solution provide detailed contextsensitive help material possible actions scenarios user interfaces application
+help accessible users offline online mode support module
+solution provide interface user log defects enhancement requests application track thereafter
+solution send alerts eg
+email sms user user chooses whenever action taken alert
+solution enable user track submitted defect enhancement request
+solution enable helpdesk user view reports submitted defects enhancement requests categorywise statuswise age wise
+support solution accessible users within application also outside application browser interface
+audit trail record actions taken either user system triggers
+includes actions taken users administrators actions initiated automatically system result system parameters
+system must keep unalterable audit trail capable automatically capturing storing information actions createreadupdatedelete taken upon critical entities case suspect property system user initiating carrying action date time event
+administrative parameters word unalterable mean audit trail data cannot modified way deleted user subject redepartment copying removable media required long contents remain unchanged
+audit trail functionality activated system must track events without manual intervention store audit trail information
+system must maintain audit trail long required least life case refers
+system must ensure audit trail data available inspection request specific event identified related data made accessible achieved authorised external personnel little familiarity system
+system must able export audit trails specified cases without affecting audit trail stored system
+functionality used external auditors wish examine analyse system activity
+system must able capture store violations ie
+users attempts access case denied access violations validly attempted attempted violations access control mechanisms
+system must minimum able provide reports actions cases organised case user chronological sequence
+system able provide reports actions cases organised workstation technically appropriate network address
+requirements specify requirements control user access correspondences files records various functionalities provided within system
+system must allow user limit access cases specified users user groups
+system provide rolebased control functionality within
+system must allow user member one group
+system must allow adminusers set user profiles allocate users groups
+system allow user stipulate users groups access cases
+system must allow changes security attributes groups users access rights security level privileges password allocation management made superuser
+user requests access searches case right access system must provide one following responses selectable configuration time display title metadata display existence case title metadata display case information indicate existence way
+options presented order increasing security
+note requirement third option ie
+stringent implies system must include cases count search results level security normally appropriate cases dealing matters national security
+user performs quick advanced search system must never include search result list record user right access
+system allows users make unauthorised attempts access cases must log audit trail
+access cases activities involving cases related documents data also need stored audit trail ensure legal admissibility assist data recovery
+error messages produced system must meaningful appropriately acted upon users likely see
+ideally error message accompanied explanatory text indication actions user take response error
+system must employ single set user interface rules small number sets provide familiar common look feel application
+system must able display several entities cases suspects simultaneously
+interfaces must made customizable userconfigurable extent possibleg
+displayed columns table move resize modify appearance
+configurations must saved user profile
+system user interface must suitable users special needs compatible specialist software used appropriate interface guidelines
+system must provide end user administrator functions easy use intuitive throughout
+system must allow persistent defaults data entry desirable
+defaults include userdefinable values values previous item values derived context eg
+date file reference user identifier
+frequentlyexecuted system transactions must designed completed small number interactions eg
+system employs graphical user interface must allow users customise
+customisation include need limited following changes menu contents layout screens use function keys onscreen colours fonts font sizes usability
+user interfaces designed make userintuitive
+user interfaces system comply standard iso
+ict accessibility iso shall standard guidance ict accessibility
+application user interfaces meet requirements recommendations
+software accessibility iso shall standard guidance software accessibility
+user interfaces meet requirements recommendations
+content accessibility wcag
+shall standard used guidance content accessibility
+application logo available pages link home page
+providing text equivalents nontext media objects nontext media objects graphical images video provided alternative equivalent textual descriptions andor equivalent textbased functionality
+making navigation selfdescriptive navigation designed help users understand go next
+general guidance achieving selfdescriptiveness given iso
+showing users presentation segment page window provide user clear sufficient indication navigation structure current segment position respect overall structure
+offering alternative access paths alternative access paths navigating specific unit content offered support different navigation strategies
+minimizing navigation effort number navigation steps needed reach certain piece content minimized long different mental models navigation strategies tasks user taken account
+splash screens avoided unless provide useful content feedback application state user
+splash screen used navigation option skip offered
+avoiding opening unnecessary windows additional windows new browser windows popup windows opened supports users task
+opening new windows distract confuse impede users variety reasons
+superimpose priy window hiding relevant information
+could make cognitively difficult understand navigation structure negative effects usability accessibility
+also require additional user actions closing unwanted windows
+vertical scrolling minimized
+done placing important information top providing links information page
+horizontal scrolling avoided wherever possible
+designing input device independence user interfaces designed allow activation controls variety input devices
+ability choose different input devices activating controls links fields buttons important users prefer certain input mode mobile users users disabilities
+general device independence achieved functionality operable via keyboard
+making user interfaces robust user interfaces designed robust possible face changing technology
+encompasses able present content containing newer technologies older user agents well
+designing content usable future technologies
+acceptable opening download times application pages designed implemented acceptable opening times download times expected range technical contexts use eg
+bandwidth application user
+particularly important frequently accessed pages pages important user navigation exploration home page
+minimizing user errors potential user errors well effort needed recover errors minimized
+providing clear error messages content error messages shown pages special error pages clearly state reason error occurred possible actions user take resolve error
+users expect error messages language user interface
+using appropriate formats units measurement currency designing user interfaces use diverse groups input output information elements currency units measurement temperatures date time phone numbers address postal codes designed usable
+making text resizable user text able resized user using functions provided user agent appropriate means ie
+text quality quality textual content respect spelling gram sufficient impede readability
+writing style reading understanding textual content screen supported suitable means including use short sentences division text shorter chunks presentation content items form bullet points
+supporting text skimming fast skimming text supported provision clear links bulleted lists highlighted keywords logical headings short phrases sentences
+readability text text presented pages readable taking account expected display characteristics spatial arrangement
+iso shall consulted screen text legibility requirements
+distinguishable withinpage links withinpage links clearly distinguishable links lead different page
+withinpage links shown dashed rather solid underlines
+avoiding link overload text pages containing large proportions links
+formatted presence links impede readability text
+using familiar terminology navigation links navigation links particularly links representing main navigation structure labelled terms familiar user based hisher general knowledge prior experience application domain experience using systems
+using descriptive link labels target purpose link directly indicated label avoiding generic labels go click except purpose link clear context page labels commonly understood semantics particular application domain
+using appropriate terminology specific users tasks information needs important making content easy understand
+marking links opening new windows links open new browser windows popup windows clearly ked
+distinguishing navigation links controls navigation links clearly distinguishable controls activating action
+typical action types user interfaces include manipulating application data performing searches communication actions opening new email window starting chat function hpresentationrelated actions sorting list search results
+providing printable document versions document either long dispersed several pages specific layout suitable online reading printerfriendly version document provided prints content form acceptable user eg
+expected layout paper format orientation
+use white space white space page ie
+space filled background color used way impair visual skimming page
+white space important means visually organizing different content elements page distance blocks information displayed becomes large rapid skimming page impeded
+selecting appropriate page lengths length page selected support priy purpose use page
+short pages generally appropriate homepages navigation pages overview pages need read quickly
+longer pages appropriate users want read content without interruptions page needs match paper counterpart
+using colour colour used care taking account human capabilities restrictions perceiving colour means conveying information
+color never means coding
+users difficulties perceiving certain colors color combinations
+using frames care frames used care taken avoid possible problems example involving use back button bookking pages scrolling information
+frames used important title frame describe purpose frames relate one another
+providing alternatives framebased presentation frames used alternative way presenting relevant information without frames provided
+providing alternative textonly pages style sheets andor frames turned possible user read understand page alternatively user provided equivalent alternative textonly page
+consistent page layout pages designed using consistent layout schemes supporting user finding similar information position different pages
+overall layout schemes apply pages preferable pages similar structure
+frequently however different pages different purposes types content
+cases pages usually grouped different categories using one layout scheme category consistently
+placing title information consistently page titles placed consistent location different pages
+observing principles human perception designing application pages general principles human perception taken account
+international standards mentioned shall consulted guidance
+practical guidelines presenting information user found iso
+guidance selecting using different forms interaction techniques found iso iso
+iso gives guidance menus iso command dialogues iso direct manipulation iso forms
+addition designing multimedia information presentations design principles recommendations described iso iso taken account
+appropriate content presentation also plays key role accessibility
+linking back home page landk pages page contain link leading home page application landk page easy recognize user
+providing site map arate navigation overview site map provided application showing structure site overview form
+consistency navigation components content navigation components overviews shown conction associated content consistency navigation component content shown maintained indicating navigation component eg
+currently visible content area
+placing navigation components consistently navigation components placed consistently pages framesets pages application
+individualization user adaptation adapting content navigation user interface individual users user groups useful mechanism providing information interest users making access relevant information efficient
+user adaptation also important making user interface accessible
+different approaches used achieving goals like providing users means customizing user interface personal needs ie
+individualization designing content navigation differently varying user groups roles ie
+employees different levels citizens etc monitoring users behaviour adapting users goals inferred behaviour observed recommending information potentially relevant interesting specific user based behaviour users user group
+taking account users tasks information needs providing different access paths navigation structures different user groups tasks information needs user groups taken consideration
+making individualization adaptation evident made evident user individualization andor adaptation used
+making user profiles evident predefined user profiles userspecified profiles used individualizing adapting content profile currently used made evident
+profiles used important provide users information concept implications
+allowing users see change profiles userspecified profiles used users able see modify delete profile demand
+user interfaces system follow guidelines specified wwwusabilitygov system availability
+system must available users
+planned downtime system must exceed hours per
+system considered user unable perform normal system function failure attributed component system workstation
+unplanned downtime system must exceed per
+number incidents unplanned downtime system must exceed per
+event software hardware failure must possible restore system inline synchronization within hours
+system must provide adequate response times commonly performed functions standard peak conditions
+system must able perform simple search within seconds advanced search multiple search criteria within seconds regardless storage capacity number cases system
+context performing search means returning result list
+include retrieving records
+system must able retrieve display within seconds case accessed within previous months regardless storage capacity number cases system
+requirement intended allow rapid retrieval frequentlyused cases understanding frequency use typically correlated recent use
+system must able retrieve display within seconds case accessed within previous months regardless storage capacity number cases system
+requirement intended allow cases cases used infrequently stored slower media active records
+system scaleable must features would preclude use small large police stations varying numbers cases handled
+external interface requirements user interfaces bootstrap offers standardized ui framework maintains consistent set user interface tools housingu utilize
+frontfacing interfaces follow bootstrap design guidelines
+every page include standard header including housingu logo important links
+additionally page contain general footer includes important links
+housingu use hardware interfaces software interfaces product run heroku platform cloud essentially receives code command line call referencing github repo compiles code hosts isolated unix v
+hooks database deploys domain
+afterward messages passed would get post requests user well calls add remove select data database communications interfaces site secured via https connection prevent session hijacking
+use captcha images ensure communication originates human thus prevent spam data certain extent
+furthermore sensitive data stored database using industry standard encryption
+emails sent restore password change contain randomized temporary password plaintext prevent identity theft
+functional requirements searchfilter search filter features allow users view list vacant units based certain criteria define
+example user want search units available within certain distance santa barbara dollars month rent
+localization feature allow users search different locations united states
+instantly find users location google show different listings area
+users also option searching whichever location choose
+geographical distances geographical distancing feature show users distances certain high priority sites school districts parks malls restaurants
+traffic proximity feature allow users see different traffic patterns around could give ideas long take commute work even friends house
+feature able show traffic different times areas
+draw information using traffic information google maps
+price comparison comparing prices different properties one important features potential buyers
+price comparison tool useful allowing price comparisons many different houses many different locations
+noise level idea behind feature would give value user average noise level area
+example property might located near freeway even college town parties lot isla vista
+software requirements specification housingu page
+behaviour user register new account
+user log log
+user recover account details
+user view units posted property owners
+user filter units geographical distances
+user filter units noise levels
+user filter units traffic proximity
+user filter units price constraints
+user filter units units contain images
+user filter units number bedrooms
+user filter units number bathrooms
+user filter units square footage
+user filter units description
+user filter units location
+user change password
+user change color scheme website
+user change email
+user view selected properties map
+user make comparisons different units
+user securely contact individual property owners
+user add properties watch list
+user notified listing watch list edited
+user notified listing watch list deleted
+user choose notified email
+user choose notified text message
+user browse watch list
+property owner add remove update units system
+property owner upload multiple images unit
+property owner see amount interest unit receives
+pages website take less one second generate minimization required bandwidth using industrystandard compression
+safety security requirements security requirements housingu include following protection user accounts including email addresses personallyidentifiable information captchabased authentication registration used minimize spam verify human users use https order prevent user session hijacking important address security issues order prevent breach information users system
+software requirements specification housingu page
+software quality attributes correctness product implement method verify correctness rental listings
+one way captcha image limit postings human users
+prevent automated spam bots posting site
+beyond must also verify validity listings
+hooking google maps api cross referencing entered addresses google verify address real
+furthermore impose check prevent duplicate listings property adaptability product must adaptable sense displays properly functionally user matter screen size using
+important today website traffic originates mobile device tablet
+accomplish using responsive css design downscale layout according screen size viewer
+could strict downscale content change simply shrinks could full content switch larger items replaced smaller phone oriented items shrinking navigation menu dropdown button opposed horizontal list inside bar
+user interfaces module budget tracker set amount budget budget tracker user need set amount spent per shopping
+features also set date write notes user purpose
+set requirement user hit set button
+enter serial barcode deduct amount previous number interface user need enter product serial barcode show price product deduct amount set
+interface also provide progress bar shows visualize progression
+also provides x button user wants delete item click button
+interface also includes button user edit amount budget user wanted increase rease amount
+module product navigation recommended products module product navigation shows interface users use search product item location superket interface short list user input product name search box
+user also click product image see price product
+product recommended figure
+shows interface execute user click product figure
+go product details location show price location product
+interface also appear product users want search
+call product recommended also appear include product price
+module halal searching module halal searching screen essys interface directly search name product show halal nonhalal product
+button search show product nameprize state halal non halal information halal statement module product ingredients module halal recognition screen essys interface user take image halal logo product know status check product approve jakim
+button scan barcode show details selected item
+details product include ingredients manufacture halal certificate product information
+product details logo recognition detection
+hardware interfaces hardware used within system standard hardware clientserver computing
+consist server computer desktop computer client mobile device
+computer use make coding android studio software develop mobile application
+hardware communicate among using standard tcpip protocol http https ldap smtp
+data interchange using json string plain text
+security purposes communication among made via https communication channel
+authentication via ldap service also required critical data operations hardware communicate peers within system
+client mobile device current implementation concentrate android version use mobile application
+specific target implementation client mobile device must equipped using camera facility users scan barcode take fully take advantage service provided system
+software interfaces figure shows structure system implemented integration mobile phone application develop based basic system requirement application server support api application program interface database choose use real time firebase platform
+software component shows figure act client database server
+roles client server communication channel used support modules messagedata involved listed table
+communications interfaces client server communication channel toolslibraries messagedata application server apache server http secure json scheme json string essys app fireb ase retrieve data application realtime firebase json string desktop apache http secure html forms links w css bootstrap jqueryajax html text standard post get methods multipart formdata json strin application server ldap server ldap service perlldap module cpan na
+system features section describes main features proposed system
+system feature uc budget tracker use case diagram budget tracker access mobile app w access web browser name budget tracker identifier uc description set budget goal allow customer track budget actor customer package uc budget tracker assumption applicable frequency medium basic course
+customer access uc module
+customer set amount needed
+customer scan product
+customer add budget
+customer delete item alternate course applicable condition applicable post condition actor able access module based role system included use case none extended use case none
+system feature uc product navigation recommended products module use case diagram product navigation recommended access mobile app name product navigation product recommended identifier uc description search product location appear similar product user want search goal help customers find position product advise customer item customer wants look
+actor customer client package uc product navigation product recommended assumption none frequency medium basic course
+customer need give input search box
+application filter product based input user fill search box
+database send information alternate course none condition customer need type product want find search box
+post condition none including use case none extended use case none
+system feature use case diagram search product module access mobile application name text recognize identifier uc description searching product identify halal nonhalal goal give halal information user actor customer package uc text recognize assumption none frequency medium basic course
+customer search product
+database send information alternate course none condition camera permission post condition none including use case none extended use case none
+system feature uc product ingredients module use case diagram product ingredients module access mobile w access website name barcode scan identifier uc description recognize halal logo goal give product ingredients user actor customer assumption applicable frequency medium basic course
+customer access uc module
+customer click scan barcode
+customer take logobarcode image
+customer click scan barcode
+customer get product ingredients alternate course applicable condition applicable post condition customer get product details included use case none extended use case none
+system handle big data execution data using
+system must recognize barcode fast soon possible
+data product changes owner superket back end database
+security requirement implements database part firebase authentication access realtime database
+software quality attributes compatibility
+application must compatible android version minimum latest android version
+application need connection internet successful use
+system documentation must embedded source code availability
+system expected available
+uptime except connectivity physical failure
+software interfaces spring boot backend technology used along mysql database
+frontend technologies include html css bootstrap react js
+data communicated interfaces accordingly
+communications interfaces main communication interface interacting front end back end ajax used
+allowed post free queries project
+done sit back wait answers
+project act middle man rather knowledgepark
+forum system allow users post free queries
+system allow users search questions answers according hisher requirement
+system give multiple answers user search
+users time update delete hisher questions answers
+users view response hisher admin analysis system shall allow admin use functionality project
+admin delete authority irrelevant questions answers
+admin access database
+user satisfaction system stands user expectation
+response time response operation good
+made possible careful programming
+error handling response user errors undesired situations taken care ensure system operates without halting
+safety robustness system able avoid tackle disastrous action
+words foul proof
+system safeguards undesired events without human intervention
+portable software architecture specific
+easily transferable platforms needed
+user friendliness system easy learn understand
+native user also use system effectively without difficulties
+performance requirements application available use server
+also application user friendly proper user interface makes easy user understand
+options present properly accessible places user convenience
+safety requirements login ids passwords metro management protected privacy using whatever constraints required application
+security requirements passwords administrators protected privacy using whatever constraints required application
+transactions regarding user records carried properly
+software quality attributes availability system run variety operating systems support java language
+system run variety hardware
+accessibility software accessible public
+compatibility software compatible multiple platforms
+durability software tested working multiple users
+effectiveness software made handle operations effectively
+maintainability system easy maintain
+clear aration interface business logic code
+gui software provides good graphical interface user administrator operate system performing required task create update viewing details book
+allows user view quick reports like book issuedreturned particular time
+provides stock verification search facility based different criteria
+user interface must customizable administrator modules provided software must fit graphical user interface accomplish standard defined design simple different interfaces follow standard pillai institute information technology engineering media studies research department information technology template user interface able interact user management module part interface mus
+account created login asks user type username password
+user entered either username password incorrectly error message appears
+search member librarian enter type book looking title interested inthen search required book entering book name
+categories view categories view shows categories books available provides ability librarian addedit delete category list
+librarians control panel control panel allow librarian addremove users add edit remove resource
+manage lending options
+system features users system provided surety account secure
+possible providing user authentication validation members using unique member id proper monitoring administrator includes updating account status showing popup member attempts issue number books exceed limit provided library policy assigning fine members skip date return proper accountability includes allowing member see members account
+administrator see manage member accounts
+performance requirement proposed system going develop used chief performance system within different campuses university interacts university staff students
+therefore expected database would perform functionally requirements specified university
+performance system fast accurate library management system shall handle expected nonexpected errors ways prevent loss information long downtime period
+thus inbuilt error testing identify invalid usernamepassword system able handle large amount data
+thus accommodate high number books users without fault
+safety requirement pillai institute information technology engineering media studies research department information technology database get crashed certain time due virus operating system failure
+therefore required take database backup database lost
+proper upsinverter facility case power supply failure
+security requirement system use secured database normal users read information cannot edit modify anything except personal information
+system different types users every user access constraints proper user authentication provided one able hack users password arate accounts admin members member access database admin rights update database
+requirement attributes multiple admins creating project right create changes system
+members users cannot changes project open source quality database maintained way user friendly users database user able easily download install system
+business rules business rule anything captures implements business policies practices
+rule enforce business policy make ision infer new data existing datathis includes rules regulations system users abide
+includes cost project discount offers provided
+users avoid illegal rules protocols
+neither admin member cross rules regulations
+user requirement users system members librarian university act administrator maintain system
+members assumed basic knowledge computers internet browsing
+administrators system knowledge internals system able rectify small problems arise due disk crashes power failures catastrophes maintain system
+proper user interface user manual online help guide install maintain system must sufficient educate users use system without problems
+admin provides certain facilities users form backup recovery forgot password data migration ie
+whenever user registers first time data stored server data replication ie
+data lost one branch still stored server auto recovery ie
+frequently auto saving information maintaining files ie
+user stable modern internet connection user latest version google chrome user computer enough power rebroadcast broadcaster either internal external webcam service used preferably desktop laptop currently mobile support needs catch software requirements specification ppcast page specific requirements
+user interface designed simplicity functionality mind
+features added later channel list descriptions channel mockup view page broadcasts point view mockup view page viewers side automatic connection broadcaster
+software requirements specification ppcast page mockup homepage ppcast user select channel name begin broadcasting hardware interfaces ppcast using webrtc api specifically mediastream receive data users webcam andor microphone
+mediastream abstracts webcam andor microphone complexities user
+hardware interfaces include desktops laptops mobile devices abstracted users browser operating system software interfaces webrtc javascript framework tools ui bootstrap websockets special tools used databases communications interfaces communication interfaces abstracted webrtc api specifically rtcpeerconnection
+rtcpeerconnection session description protocol sdp hides many network media information application
+allows communication two peers designed high level approach without worrying lower level implementation
+rtcpeerconnection also encryption data channels signaling mechanism
+webrtc uses dtls srtp encryption protocols
+ppcast also focuses ice framework connecting two peers directly
+ice framework first try connect peers using udp minimal latency
+udp fails ice framework try tcp http later tcp https
+finally direct connection software requirements specification ppcast page work ice try use turn servers connect peers adopting method requires third party
+functional behavior requirements use case view broadcaster want go website stream video viewers
+viewer want go website watch peoples live streams
+user want userfriendly experience
+user know whether web browser supported
+broadcaster want able add filters broadcast
+broadcaster want able stream whats coming webcam
+broadcaster want able stream whats screen
+broadcaster want able create channel stream
+viewer want able select channel see stream channel
+viewer want able disconnect channel select another channel view whenever want
+user want able communicate users channel realtime
+broadcaster want able stream lot people without using lot resources
+broadcaster want able stream viewers rebroadcast stream viewers
+viewer want able view channels without constraining bandwidth peer
+viewer want able rebroadcast stream effectively little technical knowledge
+broadcaster want service able intelligently choose peers able rebroadcast stream effectively
+user want streams interrupted little possible peer encounters issues potential use case view broadcaster want able select multiple cameras broadcast simultaneously
+user want able use ppcast mozilla firefox browser
+user want able register browse list channels users broadcasting
+user would like option using mobile device view broadcast content user would like option live chat broadcasters viewers software requirements specification ppcast page broadcaster would like option sharing computer screen video source viewers simultaneously broadcasting webcam
+creating new channel broadcaster happen immediately taking seconds
+joining existing channel happen quickly live video stream shall begin within seconds
+sudden unexpected peer disconnections trigger new connection another peer begin streaming within seconds
+planned peer disconnections ex user leaving channel page peer notified shall handled gracefully minimize stream disruptions begin streaming within seconds
+peers shall able handle rebroadcasting least peers using recent apple macbook pros baseline performance function mainly bottlenecked browser implementations webrtc video odingtranscoding
+safety security requirements safety use broadcast service done ethically morally broadcasters shall know camera broadcasting live assume broadcast potentially recorded viewer security broadcasters assume video stream private anyone channel name communications peers encrypted dtlssrtp defined webrtc nave denial service attacks possible instance peers could degrade stre
+software quality attributes adaptability peers attempt modify bandwidth requirements face changing network conditions lowbandwidth connections mobile channel concept overlay ppcasts peertopeer network allowing core signaling functions arate availability user access service broadcast view broadcasts via website serverside software unusual requirements allowing deployment many environments correctn
+talk clientside serverside portability reliability ppcast server attempt make sure peer always connection another peer network lower quality connections attempted detected resolved automatically different peer connection navigation different channels normal operation cause undue interruption peers rebroadcasting reusability webrtc api designed mind reusable core
+user interface intuitive minimal user set
+conflict change exclusion set monitor meeting change preference set conflict conflict change location planning meeting cancel meeting external constraints replanning meeting application domain conflict resolution check resolution policies participant interactions make communication reliable communicate request replies awareness planning process support negotiation conflict
+monitor meeting system create log messages exchanged participants easy meeting initiator monitor meeting planning proceedings
+planning meetings system shall take account constraints expressed meeting participants every constraint expressed participant shall added participants preferences set
+date meeting participant attend shall added preference set date meeting participant cannot attend shall added exclusion set user changes constraints sdms shall rearrange meeting accommodate change users preference set exclusion set preferred location shall changed meeting datelocation proposed meeting initiator
+external constraints shall considered meeting date location proposed
+example high priority meeting needs accommodated lower priority meeting changed cancelled geographical disaster occurs need reschedule meeting proposed meeting cancelled
+conflict resolution shall supported according policies stated client
+interactions meeting participants managed
+shall means communicate message participant
+shall provision invoke participants taking part communication
+process negotiation also managed
+moreover reliability communication monitored
+system usable nonexperts
+user able operate functionality easily
+elapsed time user sending request meeting date location set minimal ie
+user wonder whether submitted request
+lower bound fixed determination meeting date actual meeting extensibility system able handle explicit priorities among dates preference sets
+handle explicit dependencies meeting date meeting location
+system provide provision participant replacement person meeting
+privacy privacy rules enforced nonprivileged participant aware constraints stated participants
+system accommodate much entralized requests possible
+therefore authorized user able request meeting independently hisher whereabouts customizable system shall customizable two ways private professional meetings characterized different restrictions time period allocated eg
+meeting office hours private activities leisure time
+flexible rescheduling meeting done dynamically much flexibility possible
+also system flexible enough accommodate evolving data eg
+sets concerned participants varying address participant reached varying etc accuracythe meetings monitored accurately especially meeting carried distributed manner
