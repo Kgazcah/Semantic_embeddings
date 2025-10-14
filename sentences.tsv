@@ -1,0 +1,535 @@
+ The transfer shall take place in such a manner that all data needed to perform any Fourier Transform showsup on a single processor Backend tofrom Monitor and Control Interface.
+The BE shall receive via MC State Count data produced by the Correlator Data Valid Counts Quantizer Power Measurement Data Filter Parameters Frequency Shift Parameters Windowing Parameters Observational Mode The BE shall receive via MC data and parameters specific to the current EVLA Observational Mode needed for processing the Correlator Lag values Metadata The BE shall receive via MC all metadata necessary to format BE results for delivery to the EE Operational Status and
+This includes Lag Frame destination addresses and address changes Error and Warning The BE shall provide error and warning reports to MC as operating conditions warrant DebugTest Messages The BE shall provide several optionally selectable levels of printed messages detailing operational parameters at critical locations in the system.
+Formatted Output The BE shall deliver formatted final results to the ee System.
+The BE shall produce all data needed by the ee System for archiving and further processing.
+The output is currently expected to be in a form compatible with AIPS Measurement Sets.
+ Monitor and Control System The BE shall acknowledge receipt of all data received from MC Correlator System The BE shall notify MC of any detected interruptions of data delivery from the Correlator ee The BE shall verify successful delivery of output to the ee Internal Data The BE shall guarantee safe delivery of all internal messages Lag Frames The BE shall be able to handle lag frames of less than values Lag Sets The BE shall be able to handle lag sets up to a maximum size of value
+Data Receive The BE shall receive incoming data packets from the Correlator to Backend network interface.
+This network is a part of the BE System Verify Receive The BE shall verify the successful receipt of incoming data from the Correlator.
+This includes checking for receive errors and determining that all expected data was received accumulation of error statistics and comparison against tolerances and reporting of all out of tolerance conditions Input Data Management The BE shall store input data records in a memory buffer and track buffer locations of all input data until data processing is complete.
+Report any buffer overflow conditions Processing Management The BE shall respond to incoming correlator mode changes user optional processing sequence andor parameter changes and other external inputs that affect the data processing pipeline.
+Update internal parameter tables and synchronize data processing pipeline EVLA Operations System SRS with new operational conditions Time Series Assembly The BE shall assemble the received input data into continuous time series lag sets Data Integrity Verification The BE shall ensure that time series data is correctly ordered and contains valid data values along its entire extent.
+Compare against tolerances and report all out of tolerance conditions Data Invalid The BE shall replace all invalid data with zero values Data Invalid Count The BE shall keep track of data invalids Normalization The BE shall be able to apply normalizations based on reported data invalid counts Coarse Quantization Correction The BE shall be able to apply corrections based on state count andor quantizer power measurement data.
+This is the VanVleck correction Time Stamp Adjustment The BE shall be able to make time stamp adjustments as required by the observational mode and correlator output parameters.
+This arise when recirculation is used Windowing The BE shall be able to perform windowing operations prior and subsequent to Fourier Transform.
+This will be needed for narrow band RFI mitigation.
+Post Fourier Transform windowing will be applied as a convolution Time Domain Processing The BE shall be able to apply user selected time domain processes.
+These processes should be constructed to be chainable output of any time domain process can be piped to input of any other including replica of self and Fourier Transform and repeatable in the chain.
+No Optional time domain processes have as yet been proposed Fourier Transform Processing The BE shall be able to perform Fourier Transform the lag set time series.
+A poweroftwo complextocomplex Fast Fourier Transform with retention of all output positive and negative frequencies will be used.
+This process must be able to accept as input the output of any of the time domain processes Frequency Domain Processing The BE shall be able to apply user selected frequency domain processes.
+These processes should be constructed to be chainable output of Fourier Transform and any frequency domain process can be piped to input of any frequency domain process including replica of self and repeatable in the chain.
+No frequency domain processes have as yet been proposed Integration The BE shall be able to sum the frequency domain spectral results.
+The amount time duration of summation will be controlled by an observational mode parameter obtained via MC.
+The BE shall keep track of the number of samplesdumps integrated in each spectral channel.
+The summation will occur after all optional frequency domain processing or if none after the Fourier Transform.
+Integration for long periods of time is what will throttle the output of the Correlator to a rate manageable by the EE Output Formatting The BE shall combine the finished spectra with meta and auxiliary data to form suitably formatted output data sets.
+AIPS Measurement Sets are the expected entities Output Data Management The BE shall store formatted output data records in a memory buffer with backup disk buffering.
+Store data ready for transmission to the ee System until successful transfer has occurred.
+Report any errors and buffer overflow conditions that occur Data Send The BE shall send output data to the ee System Send Verify The BE shall verify that all sent data was successfully received.
+Report all errors Monitor IO Performance The BE shall monitor data transfer rates from EVLA Operations System SRS the Correlator and to the ee.
+Accumulate data transfer statistics and compare against tolerances.
+Report all out of tolerance conditions Monitor Compute Performance The BE shall monitor the overall data processing rate.
+Compare against tolerances and report all out of tolerance conditions Monitor Compute Errors The BE shall trap flag and repair infs NaNs underflows overflows and other computation errors.
+Accumulate computation error statistics and compare against tolerances.
+Report all out of tolerance conditions Monitor Processes The BE shall periodically or upon request check PIDs and assure that all started tasks are alive and running.
+Report missing stopped defunct and other damaged processes Monitor Processors The BE shall periodically or upon request check Backend physical processors and assure that all needed processors are alive and responding.
+Report all crashed stopped or unresponsive processors Monitor Networks The BE shall periodically or upon request check all Backend internal networks and assure that all communication connections are intact and functioning.
+Report all nonfunctioning components Start Process The BE shall be able to initiate a processing task on any Backend processor Stop Process The BE shall be able to signal a kill for any Backend process Alter Priority The BE shall be able to alter the priority of any of the BE tasks Reboot Processor The BE shall be able to initiate a reboot of any Backend a physical processor Reboot network The BE shall be able to initiate a reboot of any internal network Offload The BE shall be able to redistribute
+This involve change of destination IP addresses for the Correlator network General BE processes shall not violate archive data requirements.
+All processes shall be reversible the raw unconverted input always being recoverable from the output Data Construct Specifications Req.
+Input Data Queue a memory buffer of lag frames.
+Data entry status queue to track each record in the buffer.
+The lag frames will contain all information necessary to properly assemble complete lag sets Output Data Queue a memory buffer plus backup disk storage of all processed spectra.
+These will be converted to output AIPS Measurement Set entities prior to transfer to the ee.
+Data entry status queue to track each record in the buffer Processing Parameters names positions in sequence and adjustable parameters for all fixed and user selectable processing pipeline applications Processing flags a table of flags needed to identify various internal conditions relating to error response and processing state.
+EVLA Operations System SRS Metadata All internally and externally generated data about the processed time series and spectra including invalid data flags processes applied coordinates etc Error Report error number translatable into text error message error source error rates as applicable and time stamp Warning Report warning number translatable into text warning message warning source warning rates as applicable and time stamp Failure Report internal system component e.g.
+disk drive processors processes and networks failure number translatable into text error message and time stamp Recovery Report internal system component process processor network recovery action result Status Report internal system component process processor network functional state.
+Performance Requirements Data Integrity the Backend System shall maintain input data fidelity and dynamic range across all processing manipulation and IO functions Error Handling the system shall be capable of flagging and king corrupted data segments and proceeding without interruption or effect on other data.
+This includes but is not limited to partial data zero data underflows overflows infinities and NaNs whether obtained on input or arising during processing Hardware Req.
+Input The BE System shall be capable of accepting an aggregate data input stream from the Correlator of a minimum of.
+This must be done simultaneously with the output stream but not necessarily over the same interconnects.
+This is an initial deployment specification and will be increased over time Output The BE System shall be capable of delivering an output data stream to the ee System of a minimum of MBytessec.
+This includes resends and simultaneous transfer of data stored due to a previous ee connection outage.
+This must be done simultaneously with the output stream but not necessarily over the same interconnects.
+This is an initial deployment specification and will be increased over time CPU The total processor capability of the BE System shall be combination of numbers of processors and individual processor speed sufficient to accomplish all processing tasks while avoiding loss or delay on the input and output data streams Memory The BE System shall have sufficient amount TBD memory with sufficient rate TBD access speeds to accomplish all processing tasks while avoiding loss or delay on the input and output dat
+Availability of source code for the OS will be very important.
+Autocorrection the Backend System shall be selfmonitoring.
+It will be capable of detecting reporting on and automatically taking action to remedy or lessen the impact of at a minimum the following types of abnormal conditions processor hardware failure operating system hangs or crashes computational performance below minimum specifications computational error rates above maximum specification internal communications failures and external with the Correlator and EE communications disruptions Software the software part of the system shall be able to perform withou
+The system will cache a predetermined amount TBD of correlator data after the first encounter of unavailable critical data and complete all requested operations on cached data once the unavailable critical data is obtained Standby Mode the system shall be able to sit at idle and resume operations with minimal amount TBD delay Hardware Accessibility all system processing and interconnect hardware shall be readily accessible for maintenance repair replacement andor reconfiguration Software Accessibility
+EVLA Operations System SRS.
+Security The Backend System needs a robust security mechanism in place so that unauthorized users are not allowed access.
+Authorized users are expected to be restricted to software and hardware development testing maintenance and operations personnel.
+All users of the Backend System must be uniquely identified.
+This could be done via a username and associated password scheme that would authenticate and authorize the user access to the system and if applicable grant the user access to restricted or controlled parts of the system.
+If a user cannot be identified they will not be given access.
+In order to monitor all past access to the system all attempts to access the system should be logged.
+Users needs and expectations from the system will be different.
+Systems operations should be given unrestricted access to all aspects of the system and should have the authority to grant and revoke privileges on a peruser basis.
+Development testing and maintenance personnel on the other hand require access to some parts of the system but not all indicating that an access level is needed that allows privileges to be granted on a peruser and whatdoyouneedtodo basis.
+All users of the system shall login using some form of unique identification.g.
+username and password All login attempts shall be done in a secure manner.g.
+encrypted passwords A system administrator shall have unrestricted access to all aspects of the system Each user shall have a set of system access properties that defines the users privileges within the system.g.
+the subsystems a user control or system tools the user access The administrator shall have the ability to create and add a new user to the system The administrator shall have the ability to remove a user from the system The administrator shall have the ability to edit a users system access properties The administrator shall have the ability to block all access to the system for all users or selectively by user.
+All blocked users with active sessions shall automatically be logged off.
+The functionality of the CCTNS application is focused on providing value to the police personnel especially the officers operating at the cutting edge and easing the day to day operations of the police function.
+Registration Citizens can register their complaints with police and then based on the evidence facts and following investigation police shall take the complaint forward.
+The Registration module acts as an interface between the police and citizens and it eases the approach interaction and information exchange between police and complainants.
+Investigation After a complaint is initiated police initiates the investigation process.
+The Investigation module of the CCTNS facilitates the investigation process and introduces operational efficiencies by automating most of the tasks that take place after initial entries are made during Registration.
+Prosecution Interfacing with the courts during the prosecution of cases is an integral part of the responsibilities of police personnel.
+A designated constable from each police station constantly interfaces with the courts.
+The Prosecution module of the CCTNS aids this interfacing by providing a platform to record entries of the court interactions.
+Search The Search module of the CCTNS gives police personnel the ability to execute a basic or advanced search on cases.
+Using the search functionality police personnel can search for a particular person type of crime modus operandi property etc.
+It also gives the user the ability to customize the results view by criminalaccused or by cases.
+It makes reporting easy for police by enabling them to execute different types of queries such as monthly reporting RTI related etc.
+Citizen Interface The Citizen Interface module of the CCTNS acts as a conduit for the information exchange between citizens and police unitspersonnel.
+Citizens can use it as a tool to get information or acknowledgements from police.
+The police in turn can use it to respond to citizens with very little turnaround time.
+It improves overall productivity by helping citizens and police to cut short the drudgery of large amounts of paperwork.
+Navigation The Navigation module of the CCTNS provides role based landing pages which help in navigating through the CCTNS application.
+It shows information such as cases assigned alerts pending tasks etc hence helping police personnel to plan better and execute with greater efficiency.
+Application Configuration The Configuration module of the CCTNS helps keep the application configured according to the states requirements in addition to keeping data elementsrules up to date.
+With a proper configuration information such as act and sections state specific data castes tribes property information etc.
+can be created updated and deleted.
+The functional requirements for each of the modules are provided as A to A in arate enclosures.
+The nonfunctional requirements specify the qualitative attributes such as userfriendliness and performance of the system that are critical for the increased useracceptance of the application.
+The solution should provide detailed contextsensitive help material for all the possible actions and scenarios on all user interfaces in the application.
+The help should be accessible to the users both in the offline and online mode Support Module.
+The solution should provide an interface for the user to log any defects or enhancement requests on the application and track thereafter.
+The solution should send alerts e.g.
+email SMS to the user if the user chooses to whenever any action has been taken on the alert.
+The solution should enable the user to track the submitted defect or enhancement request.
+The solution should enable the helpdesk user to view the reports on the submitted defects or enhancement requests categorywise statuswise and age wise.
+The support solution should be accessible to the users both from within the application and also outside the application through a browser interface.
+An audit trail is a record of actions taken by either the user or the system triggers.
+This includes actions taken by users or Administrators or actions initiated automatically by the system as a result of system parameters.
+The System must keep an unalterable audit trail capable of automatically capturing and storing information about All the actions createreadupdatedelete that are taken upon the critical entities case suspect property in the system The user initiating and or carrying out the action The date and time of the event.
+Administrative parameters The word unalterable is to mean that the audit trail data cannot be modified in any way or deleted by any user it be subject to redepartment and copying to removable media if required so long as its contents remain unchanged.
+Once the audit trail functionality has been activated the System must track events without manual intervention and store in the audit trail information about them.
+The System must maintain the audit trail for as long as required which will be at least for the life of the case to which it refers.
+The System must ensure that audit trail data is available for inspection on request so that a specific event can be identified and all related data made accessible and that this can be achieved by authorised external personnel who have little or no familiarity with the system.
+The System must be able to export audit trails for specified cases without affecting the audit trail stored by the System.
+This functionality can be used by external auditors who wish to examine or analyse system activity.
+The System must be able to capture and store violations i.e.
+A users attempts to access a case to which he is denied access and where violations can validly be attempted attempted violations of access control mechanisms.
+The System must at a minimum be able to provide reports for actions on cases organised By case By user In chronological sequence.
+The System should be able to provide reports for actions on cases organised by workstation and where technically appropriate by network address.
+The requirements specify the requirements to control the user access to correspondences files and records and various functionalities provided within the system.
+The System must allow the user to limit access to cases to specified users or user groups.
+The system should provide for rolebased control for the functionality within .
+The System must allow a user to be a member of more than one group.
+The System must allow only adminusers to set up user profiles and allocate users to groups.
+The System should allow a user to stipulate which other users or groups can access cases.
+The System must allow changes to security attributes for groups or users such as access rights security level privileges password allocation and management to be made only by superuser.
+If a user requests access to or searches for a case which he does not have the right to access the System must provide one of the following responses selectable at configuration time display title and metadata display the existence of a case but not its title or other metadata do not display any case information or indicate its existence in any way.
+These options are presented in order of increasing security.
+Note that the requirement in the third option i.e.
+the most stringent implies that the System must not include such cases in any count of search results this level of security is normally appropriate for cases dealing with matters such as national security.
+If a user performs a quick or advanced search the System must never include in the search result list any record which the user does not have the right to access.
+If the System allows users to make unauthorised attempts to access cases it must log these in the audit trail.
+Any access to cases and all other activities involving the cases and related documents or data should also need to be stored in the audit trail to ensure legal admissibility and to assist in data recovery.
+All error messages produced by the System must be meaningful so that they can be appropriately acted upon by the users who are likely to see them.
+Ideally each error message will be accompanied by explanatory text and an indication of the actions which the user can take in response to the error.
+The System must employ a single set of user interface rules or a small number of sets to provide a familiar and common look and feel for the application.
+The System must be able to display several entities cases suspects simultaneously.
+The interfaces must be made customizable or userconfigurable to the extent possible.g.
+the displayed columns in the table move resize modify the appearance.
+Such configurations must be saved in the user profile.
+The System user interface must be suitable for users with special needs that is compatible with specialist software that be used and with appropriate interface guidelines.
+The System must provide End User and Administrator functions which are easy to use and intuitive throughout.
+The System must allow persistent defaults for data entry where desirable.
+These defaults should include userdefinable values values same as previous item values derived from context e.g.
+date file reference user identifier.
+Frequentlyexecuted System transactions must be designed so that they can be completed with a small number of interactions e.g.
+Where the System employs a graphical user interface it must allow users to customise it.
+Customisation should include but need not be limited to the following changes menu contents layout of screens use of function keys onscreen colours fonts and font sizes Usability.
+The user interfaces should be designed to make them userintuitive.
+The user interfaces of the system should comply with Standard ISO.
+ICT accessibility ISO shall be the standard for guidance on ICT accessibility.
+Application user interfaces to meet its requirements and recommendations.
+Software accessibility ISO shall be the standard for guidance on software accessibility.
+User interfaces should meet its requirements and recommendations.
+Content accessibility WCAG.
+shall be the standard used for guidance on content accessibility.
+The application logo to be available on all pages as a link to the home page.
+Providing text equivalents for nontext media objects All nontext media objects such as graphical images or video should be provided with alternative equivalent textual descriptions andor with equivalent textbased functionality.
+Making navigation selfdescriptive Navigation should be designed to help users understand where they are where they have been and where they can go next.
+General guidance on achieving selfdescriptiveness is given in ISO.
+Showing users where they are Each presentation segment page or window should provide the user with a clear and sufficient indication of where he or she is in the navigation structure and of the current segment position with respect to the overall structure.
+Offering alternative access paths Alternative access paths for navigating to a specific unit of content should be offered to support different navigation strategies.
+Minimizing navigation effort The number of navigation steps needed to reach a certain piece of content should be minimized as long as different mental models navigation strategies and tasks of the user are taken into account.
+Splash screens should be avoided unless they provide useful content or feedback about the application state to the user.
+If a splash screen is used a navigation option to skip it should be offered.
+Avoiding opening unnecessary windows Additional windows such as new browser windows or popup windows should only be opened if this supports the users task.
+Opening new windows can distract confuse or impede users for a variety of reasons.
+They can superimpose the priy window hiding relevant information.
+They could make it cognitively more difficult to understand the navigation structure with negative effects on both usability and accessibility.
+They also require additional user actions for closing unwanted windows.
+Vertical scrolling should be minimized.
+This be done by placing important information at the top and providing links to information that is further down the page.
+Horizontal scrolling should be avoided wherever possible.
+Designing for input device independence User interfaces should be designed to allow activation of controls by a variety of input devices.
+The ability to choose between different input devices for activating controls such as links fields and buttons is important both for users who prefer a certain input mode mobile users and users with disabilities.
+In general device independence can be achieved if the functionality is operable via a keyboard.
+Making user interfaces robust User interfaces should be designed to be as robust as possible in the face of changing technology.
+This encompasses being able to present content containing newer technologies by older user agents as well as .
+designing content to be usable with future technologies.
+Acceptable opening download times Application pages should be designed and implemented so that there are acceptable opening times and download times for the expected range of technical contexts of use e.g.
+bandwidth between the application and the user.
+This is particularly important for frequently accessed pages or pages that are important for user navigation and exploration such as the home page.
+Minimizing user errors Potential user errors as well as the effort needed to recover from errors should be minimized.
+Providing clear error messages The content of error messages shown on the pages or special error pages should clearly state the reason why the error occurred and if possible actions the user can take to resolve the error.
+Users expect error messages to be in the same language as the user interface.
+Using appropriate formats units of measurement or currency When designing user interfaces for use by diverse groups input and output of information elements such as currency units of measurement temperatures date and time phone numbers address or postal codes should be designed so that they are usable.
+Making text resizable by the user Text should be able to be resized by the user using functions provided by the user agent or other appropriate means i.e.
+Text quality The quality of textual content with respect to spelling and gram should be sufficient so as not to impede readability.
+Writing style The reading and understanding of the textual content on the screen should be supported by suitable means including the use of short sentences the division of the text into shorter chunks or the presentation of content items in the form of bullet points.
+Supporting text skimming Fast skimming of text should be supported by the provision of clear links bulleted lists highlighted keywords logical headings and short phrases and sentences.
+Readability of text Text presented on the pages should be readable taking into account the expected display characteristics and spatial arrangement.
+ISO shall be consulted for screen text legibility requirements.
+Distinguishable withinpage links Withinpage links should be clearly distinguishable from other links that lead to a different page.
+Withinpage links are shown with dashed rather than solid underlines.
+Avoiding link overload Text pages containing large proportions of links should .
+be formatted so that the presence of links does not impede the readability of the text.
+Using familiar terminology for navigation links Navigation links particularly links representing the main navigation structure should be labelled with terms that are familiar to the user based on hisher general knowledge prior experience in the application domain or experience of using other systems.
+Using descriptive link labels The target or purpose of a link should be directly indicated by its label avoiding generic labels such as go or click here except where the purpose of the link is clear from its context on the page or the labels have commonly understood semantics in the particular application domain.
+Using appropriate terminology specific to the users tasks and information needs is important for making the content easy to understand.
+Marking links opening new windows Links that open new browser windows or popup windows should be clearly ked.
+Distinguishing navigation links from controls Navigation links should be clearly distinguishable from controls activating some action.
+Typical action types in user interfaces include manipulating application data performing searches communication actions such as opening a new email window or starting a chat function and Hpresentationrelated actions such as sorting a list of search results.
+Providing printable document versions If a document is either too long dispersed over several pages or in a specific layout that is not suitable for online reading a printerfriendly version of the document should be provided that prints the content in a form acceptable to the user e.g.
+in the expected layout paper format or orientation.
+Use of white space White space on a page i.e.
+space filled only with the background color should be used in such a way that it does not impair the visual skimming of the page.
+While white space is an important means of visually organizing the different content elements on a page if the distance between the blocks of information displayed becomes too large rapid skimming of the page can be impeded.
+Selecting appropriate page lengths The length of a page should be selected so as to support the priy purpose and use of the page.
+Short pages are generally more appropriate for homepages navigation pages or overview pages that need to be read quickly.
+Longer pages can be more appropriate when users want to read the content without interruptions or when the page needs to match a paper counterpart.
+Using colour Colour should be used with care taking into account human capabilities and restrictions in perceiving colour and not as the only means of conveying information.
+Color should never be the only means of coding.
+Some users have difficulties in perceiving certain colors or color combinations .
+Using frames with care If frames are used care should be taken to avoid possible problems for example those involving the use of the back button bookking of pages or scrolling of information.
+When frames are used it is important to title each frame and to describe its purpose and how frames relate to one another other.
+Providing alternatives to framebased presentation If frames are used an alternative way of presenting relevant information without frames should be provided.
+Providing alternative textonly pages When style sheets andor frames are turned off it should be possible for the user to read and understand the page alternatively the user should be provided with an equivalent alternative textonly page.
+Consistent page layout Pages should be designed using consistent layout schemes supporting the user in finding similar information at the same position on different pages.
+Overall layout schemes apply to all pages and are preferable when all pages have a similar structure.
+Frequently however different pages have different purposes and types of content.
+In such cases pages can usually be grouped in different categories using one layout scheme for each category consistently.
+Placing title information consistently Page titles should be placed in a consistent location on the different pages.
+Observing principles of human perception When designing application pages the general principles of human perception should be taken into account.
+The International Standards mentioned below shall be consulted for guidance.
+Practical guidelines for presenting information to the user are to be found in ISO.
+Guidance on selecting and using different forms of interaction techniques is to be found in ISO to ISO.
+ISO gives guidance about menus ISO about command dialogues ISO about direct manipulation and ISO about forms.
+In addition when designing multimedia information presentations the design principles and recommendations described in ISO to ISO should be taken into account.
+Appropriate content presentation also plays a key role in accessibility.
+Linking back to the home page or landk pages Each page should contain a link leading to the home page of the application or to a landk page that is easy to recognize for the user.
+Providing a site map A arate navigation overview such as a site map should be provided for application showing the structure of the site in an overview form.
+Consistency between navigation components and content If navigation components or overviews are shown in conction with associated content consistency between the navigation component and the content shown should be maintained by indicating in the navigation component e.g.
+currently visible in the content area.
+Placing navigation components consistently Navigation components should be placed consistently on the pages or in the framesets in the pages of the application.
+Individualization and user adaptation Adapting the content and the navigation of a user interface to individual users or user groups can be a useful mechanism for providing information that is of interest to the users and for making access to relevant information more efficient.
+User adaptation can also be important for making the user interface more accessible.
+Different approaches can be used for achieving these goals like providing users with means for customizing the user interface to their personal needs i.e.
+individualization designing content and navigation differently for varying user groups or roles i.e.
+such as employees of different levels citizens etc monitoring the users behaviour and adapting to the users goals that are inferred from the behaviour observed recommending information that is potentially more relevant or interesting to the specific user based on the behaviour of all users or a user group.
+Taking account of the users tasks and information needs When providing different access paths or navigation structures for different user groups the tasks and information needs of these user groups should be taken into consideration.
+Making individualization and adaptation evident It should be made evident to the user when individualization andor adaptation are used.
+Making user profiles evident If predefined user profiles or userspecified profiles are used for individualizing or adapting content the profile currently used should be made evident.
+If profiles are used it is important to provide users with information about this concept and its implications.
+Allowing users to see and change profiles If userspecified profiles are used users should be able to see modify and delete that profile on demand.
+The user interfaces of the system should follow the guidelines specified under www.usability.gov System Availability.
+The System must be available to users from to on.
+The planned downtime for the System must not exceed hours per.
+The System is considered to be down if any user is unable to perform any normal System function and if this failure is attributed to any component of the System other than the workstation.
+Unplanned downtime for the System must not exceed per.
+The number of incidents of unplanned downtime for the System must not exceed per.
+In the event of any software or hardware failure it must be possible to restore the System with inline synchronization within no more than hours.
+The System must provide adequate response times for commonly performed functions under both standard and peak conditions.
+The System must be able to perform a simple search within seconds and a advanced search multiple search criteria within seconds regardless of the storage capacity or number of cases in the system.
+In this context performing a search means returning a result list.
+It does not include retrieving the records themselves.
+The System must be able to retrieve and display within seconds the case which has been accessed within the previous months regardless of storage capacity or number of cases in the system.
+This requirement is intended to allow for rapid retrieval of frequentlyused cases on the understanding that frequency of use is typically correlated with recent use.
+The System must be able to retrieve and display within seconds the case which has not been accessed within the previous months regardless of storage capacity or number of cases in the system.
+This requirement is intended to allow for cases where cases used infrequently are stored on slower media than more active records.
+The System be scaleable and must not have any features which would preclude use in small or large police stations with varying numbers of cases handled.
+External Interface Requirements User Interfaces Bootstrap offers a standardized UI framework that maintains a consistent set of user interface tools that HousingU will utilize.
+All frontfacing interfaces will follow Bootstrap design guidelines.
+Every page will include a standard header including the HousingU logo and important links.
+Additionally each page will contain a general footer that includes other important links.
+HousingU does not use any hardware interfaces Software Interfaces Our product will be run on a Heroku platform in the cloud which essentially receives our code from a command line call referencing our GitHub repo compiles our code and hosts it in an isolated Unix v
+This hooks into our database and then deploys it on our domain.
+Afterward the only messages passed would be GET and POST requests from the user as well as calls to add remove or select data from our database Communications Interfaces Our site will be secured via an HTTPS connection to prevent session hijacking.
+We will use CAPTCHA images to ensure all communication originates from a human and thus prevent spam data to a certain extent.
+Furthermore sensitive data will be stored in the database using industry standard encryption.
+Emails sent to restore a password change will contain a randomized temporary password not in plaintext so as to prevent identity theft.
+Functional Requirements SearchFilter The search and filter features will allow users to view a list of vacant units based on certain criteria they define.
+For example a user want to search on all units that are available within a certain distance of Santa Barbara and under dollars a month for rent.
+Localization This feature will allow users to search by different locations in the United States.
+It will instantly find the users location through Google and show them different listings in their area.
+Users will also have the option of searching whichever location they choose.
+Geographical Distances The Geographical Distancing feature will show users the distances to certain high priority sites such as school districts parks malls and restaurants.
+Traffic Proximity This feature will allow users to see the different traffic patterns around them which could give them ideas of how long it will take to commute to work or even a friends house.
+This feature will be able to show traffic for different times and areas.
+We can draw this information by using traffic information from Google Maps.
+Price Comparison Comparing prices of different properties is one of the most important features for potential buyers.
+Our price comparison tool will be useful allowing for price comparisons of many different houses in many different locations.
+Noise Level The idea behind this feature would be to give a value to the user of the average noise level in the area.
+For example the property might be located near a freeway or even in a college town that parties a lot such as Isla Vista.
+Software Requirements Specification for HousingU Page.
+Behaviour  As a user I can register a new account.
+As a user I can log in and log out.
+As a user I can recover my account details.
+As a user I can view units posted by property owners.
+As a user I can filter units by geographical distances.
+As a user I can filter units by noise levels.
+As a user I can filter units by traffic proximity.
+As a user I can filter units by price constraints.
+As a user I can filter units by units that contain images.
+As a user I can filter units by number of bedrooms.
+As a user I can filter units by number of bathrooms.
+As a user I can filter units by square footage.
+As a user I can filter units by description.
+As a user I can filter units by location.
+As a user I can change my password.
+As a user I can change the color scheme of the website.
+As a user I can change my email.
+As a user I can view selected properties on a map.
+As a user I can make comparisons between different units.
+As a user I can securely contact individual property owners.
+As a user I can add properties to a watch list.
+As a user I will be notified if a listing on watch list is edited.
+As a user I will be notified if a listing on watch list is deleted.
+As a user I can choose to be notified by email.
+As a user I can choose to be notified by text message.
+As a user I can browse my watch list.
+As a property owner I can add remove and update units in the system.
+As a property owner I can upload multiple images for each unit.
+As a property owner I can see the amount of interest a unit receives.
+All pages of the website should take less than one second to generate Minimization of required bandwidth using industrystandard compression.
+Safety and Security Requirements Security requirements in HousingU include the following Protection of user accounts including email addresses and other personallyidentifiable information CAPTCHAbased authentication on registration used to minimize spam and verify human users Use of HTTPS in order to prevent user session hijacking It is important to address these security issues in order to prevent a breach of information by any other users of the system.
+Software Requirements Specification for HousingU Page.
+Software Quality Attributes Correctness Our product will implement a method to verify correctness of rental listings.
+One way we can do this is with a CAPTCHA image so as to limit the postings to human users only.
+This will prevent automated spam bots from posting on our site.
+Beyond that me must also verify the validity of listings.
+We do this by hooking into the Google Maps API and cross referencing entered addresses with Google to verify the address is real.
+Furthermore we can impose a check to prevent duplicate listings of the same property Adaptability Our product must be adaptable in the sense that it displays properly and functionally to a user no matter what screen size they are using.
+This is important because today more than of website traffic originates from a mobile device or tablet.
+We will accomplish this using a responsive CSS design that will downscale our layout according to the screen size of the viewer.
+This could be a strict downscale in which the content does not change it simply shrinks or it could be a full content switch in which larger items are replaced by smaller phone oriented items such as shrinking the navigation menu into a dropdown from a button as opposed to a horizontal list inside a bar.
+User Interfaces Module Budget Tracker Set amount of budget above is about Budget Tracker where user need to set an amount that will be spent per shopping.
+This features also can set a date and write some notes for user purpose.
+After set all above requirement user can hit Set button.
+  Enter the serial barcode and deduct the amount from the previous number above is an interface that user need to enter the product serial barcode and it will show up the price of the product and will deduct from the amount that has been set before.
+The interface also provide a progress bar that shows to visualize the progression.
+It also provides X button if user wants to delete item just click the button.
+The interface also includes button so the user can edit the amount of budget if the user wanted to increase or rease the amount.
+  Module Product Navigation Recommended Products Module Product Navigation shows an interface that users use to search the product item location in the superket this interface will short list by user input of product name in the search box.
+User also can click the product image to see the price of the product.
+  Product Recommended In figure.
+shows an interface that execute after user click the product in figure.
+it will go to the product details location and show the price and location of product.
+  This interface also appear the same product that users want to search.
+Here will call that product recommended and will also appear include product price.
+Module Halal Searching Module Halal Searching Screen in ESSYS   In this interface directly search the name of product to show Halal or NonHalal of the Product.
+The Button Search will show the Product nameprize and state Halal or Non Halal information Halal Statement   Module Product Ingredients Module Halal recognition screen in ESSYS In this interface the user can take an image of halal logo from the product to know the status and to check the product is approve or not from JAKIM.
+The button Scan Your Barcode will show the details of the selected item.
+The details of the product will include the ingredients manufacture halal certificate and product information.
+  Product details after logo recognition detection.
+Hardware Interfaces All the hardware used within the system are the standard hardware for clientserver computing.
+They are consist of server computer desktop computer and client mobile device.
+Some of computer use for make a coding in android studio software to develop the mobile application.
+The hardware communicate among them using standard TCPIP protocol HTTP HTTPS LDAP SMTP.
+The data they interchange using JSON String and Plain Text.
+For security purposes communication among them have to be made via HTTPS communication channel.
+Authentication via LDAP service also be required for critical data operations before the hardware can communicate with their peers within the system.
+For client mobile device current implementation is concentrate on Android version and above can be use the mobile application.
+Specific to our target that have to implementation client mobile device must be equipped with using camera facility so the users can scan the barcode or take fully take advantage of the service provided by the system.
+Software Interfaces The figure shows the structure of the system that we implemented the integration of mobile phone application that we develop based on basic system requirement itself such as Application Server to support the Api application program interface and the database that we choose to use Real time firebase platform.
+The software component that shows in figure act as a client database or server.
+Their roles as a client or server communication channel to be used support modules and messagedata involved are listed in Table  .
+Communications Interfaces Client Server Communication Channel ToolsLibraries Messagedata Application Server Apache Server HTTP Secure Json Scheme JSON String ESSYS App Fireb ase Retrieve data to application realtime firebase JSON String Desktop Apache HTTP Secure HTML forms and links W CSS Bootstrap JQueryAJAX HTML Text standard POST GET methods multipart formdata JSON Strin Application Server Ldap Server LDAP service PerlLDAP module CPAN NA  .
+System Features This section describes main features of the proposed system.
+System Feature UC Budget Tracker Use Case diagram of Budget Tracker M access through Mobile App W access through Web Browser Name Budget Tracker Identifier UC Description Set the budget Goal To allow customer to track their budget Actor Customer   Package UC Budget Tracker Assumption Not applicable Frequency Medium Basic Course.
+Customer access to UC module.
+Customer set the amount needed.
+Customer will scan the product.
+Customer can add on budget.
+Customer can delete item Alternate Course Not applicable Condition Not applicable Post Condition Actor able to access module based their role in system Included Use Case None Extended Use Case None  .
+System Feature UC Product Navigation Recommended Products Module use case diagram Product Navigation Recommended M access through Mobile App Name Product navigation Product Recommended Identifier UC Description Search product location and appear the similar product that user want to search Goal To help customers find the position of a product and to advise the customer about the same item the customer wants to look for.
+Actor Customer client Package UC Product Navigation Product Recommended Assumption None   Frequency Medium Basic Course.
+Customer need to give the input in search box.
+The application will filter the product based on what input that user fill in the search box.
+Database send the Information Alternate Course None Condition Customer need to type the product that they want to find in the search box.
+Post Condition None Including Use Case None Extended Use Case None  .
+System Feature Use case diagram for search product in module M Access through Mobile Application Name Text Recognize Identifier UC Description Searching Product to identify halal or Nonhalal Goal To give halal information to user Actor Customer Package UC Text Recognize Assumption None   Frequency Medium Basic Course.
+Customer search the product.
+Database send the Information Alternate Course None Condition Camera Permission Post Condition None Including Use Case None Extended Use Case None  .
+System Feature UC Product Ingredients Module Use case diagram for product ingredients in module M Access through mobile W Access through website Name Barcode Scan Identifier UC Description Recognize halal logo Goal To give product ingredients to user Actor Customer Assumption Not applicable Frequency Medium Basic Course.
+Customer access to UC module.
+Customer click Scan barcode.
+Customer take an logobarcode image.
+Customer click Scan Your Barcode  .
+Customer get the product ingredients Alternate Course Not applicable Condition Not Applicable Post Condition Customer get the product details Included Use Case None Extended Use Case None.
+System can handle the big data when execution data been using.
+System must recognize the barcode fast as soon as possible.
+The data of the product only can be changes by the owner of superket at the back end database.
+Security requirement only be implements in the database part which is firebase authentication to access the Realtime database.
+Software Quality Attributes Compatibility.
+The application must be compatible with android version minimum and latest android version.
+The application need connection from internet to successful use.
+All system documentation must be embedded in the source code Availability.
+The system is expected to be available.
+uptime except connectivity and physical failure.
+In software interfaces Spring Boot is the backend technology used along with MySQL Database.
+The frontend technologies include HTML CSS Bootstrap React JS.
+Data will be communicated between these interfaces accordingly.
+Communications Interfaces The main communication interface for interacting with the Front End and Back End Ajax will used.
+You are allowed to post free queries in this project.
+Once this is done all you have to do is sit back and wait for the answers.
+Our project does not act as a middle man but rather knowledgepark.
+Forum The system will allow users to post free queries.
+The system will allow users to search questions and answers according to hisher requirement.
+The system will give multiple answers for user to search.
+The users can any time update or delete hisher questions and answers.
+The users can view response for hisher Admin Analysis The system shall allow the admin to use all functionality of project.
+Admin should have delete authority for irrelevant questions and answers.
+Admin can have access to all database.
+ User satisfaction The system is such that it stands up to the user expectation.
+Response time The response of all the operation is good.
+This has been made possible by careful programming.
+Error Handling Response to user errors and undesired situations has been taken care of to ensure that the system operates without halting.
+Safety and Robustness The system is able to avoid or tackle disastrous action.
+In other words it should be foul proof.
+The system safeguards against undesired events without human intervention.
+Portable The software should not be architecture specific.
+It should be easily transferable to other platforms if needed.
+User friendliness The system is easy to learn and understand.
+A native user can also use the system effectively without any difficulties.
+Performance Requirements The application should be available for use through the server.
+Also the application should be user friendly with a proper user interface which makes it easy for the user to understand.
+All the options should be present in properly accessible places for user convenience.
+Safety Requirements All login ids and passwords of the Metro management should be protected for privacy using whatever constraints required the application.
+Security Requirements All passwords of the administrators should be protected for privacy using whatever constraints required for the application.
+Transactions regarding user records should be carried out properly.
+Software Quality Attributes Availability The system should run on a variety of operating systems that support the Java language.
+The system should run on a variety of hardware.
+Accessibility The software will be accessible to public.
+Compatibility The software will be compatible with multiple platforms.
+Durability The software will be tested for working with multiple users.
+Effectiveness The software will be made to handle operations effectively.
+Maintainability The system should be easy to maintain.
+There should be a clear aration between the interface and the business logic code.
+GUI The software provides good graphical interface for the user and the administrator can operate on the system performing the required task such as create update viewing the details of the book.
+It allows user to view quick reports like Book IssuedReturned in between particular time.
+It provides stock verification and search facility based on different criteria.
+The user interface must be customizable by the administrator All the modules provided with the software must fit into this graphical user interface and accomplish to the standard defined The design should be simple and all the different interfaces should follow a standard Pillai Institute of Information Technology Engineering Media Studies Research Department of Information Technology template The user interface should be able to interact with the user management module and a part of the interface mus
+Once his account is created he can Login which asks the user to type his username and password.
+If the user entered either his username or password incorrectly then an error message appears.
+Search The member or librarian can enter the type of book he is looking for and the title he is interested inthen he can search for the required book by entering the book name.
+Categories View Categories view shows the categories of books available and provides ability to the librarian to addedit or delete category from the list.
+Librarians Control Panel This control panel will allow librarian to addremove users add edit or remove a resource.
+And manage lending options.
+System Features The users of the system should be provided the surety that their account is secure.
+This is possible by providing User authentication and validation of members using their unique member ID Proper monitoring by the administrator which includes updating account status showing a popup if the member attempts to issue number of books that exceed the limit provided by the library policy assigning fine to members who skip the date of return Proper accountability which includes not allowing a member to see other members account.
+Only administrator will see and manage all member accounts.
+Performance Requirement The proposed system that we are going to develop will be used as the Chief performance system within the different campuses of the university which interacts with the university staff and students.
+Therefore it is expected that the database would perform functionally all the requirements that are specified by the university.
+The performance of the system should be fast and accurate Library Management System shall handle expected and nonexpected errors in ways that prevent loss in information and long downtime period.
+Thus it should have inbuilt error testing to identify invalid usernamepassword The system should be able to handle large amount of data.
+Thus it should accommodate high number of books and users without any fault.
+Safety Requirement Pillai Institute of Information Technology Engineering Media Studies Research Department of Information Technology The database get crashed at any certain time due to virus or operating system failure.
+Therefore it is required to take the database backup so that the database is not lost.
+Proper UPSinverter facility should be there in case of power supply failure.
+Security Requirement System will use secured database Normal users can just read information but they cannot edit or modify anything except their personal and some other information.
+System will have different types of users and every user has access constraints Proper user authentication should be provided No one should be able to hack users password There should be arate accounts for admin and members such that no member can access the database and only admin has the rights to update the database.
+Requirement attributes There be multiple admins creating the project all of them will have the right to create changes to the system.
+But the members or other users cannot do changes The project should be open source The Quality of the database is maintained in such a way so that it can be very user friendly to all the users of the database The user be able to easily download and install the system.
+Business Rules A business rule is anything that captures and implements business policies and practices.
+A rule can enforce business policy make a ision or infer new data from existing data.This includes the rules and regulations that the System users should abide by.
+This includes the cost of the project and the discount offers provided.
+The users should avoid illegal rules and protocols.
+Neither admin nor member should cross the rules and regulations.
+User Requirement The users of the system are members and Librarian of the university who act as administrator to maintain the system.
+The members are assumed to have basic knowledge of the computers and internet browsing.
+The administrators of the system should have more knowledge of the internals of the system and is able to rectify the small problems that arise due to disk crashes power failures and other catastrophes to maintain the system.
+The proper user interface user manual online help and the guide to install and maintain the system must be sufficient to educate the users on how to use the system without any problems.
+The admin provides certain facilities to the users in the form of Backup and Recovery Forgot Password Data migration i.e.
+whenever user registers for the first time then the data is stored in the server Data replication i.e.
+if the data is lost in one branch it is still stored with the server Auto Recovery i.e.
+frequently auto saving the information Maintaining files i.e.
+ User has stable modern internet connection User has the latest version of Google Chrome User computer has enough power to rebroadcast Broadcaster has either an internal or external webcam The service is used preferably on a desktop or laptop o Currently mobile support needs to catch up Software Requirements Specification for ppcast Page Specific Requirements.
+The user interface will be designed with simplicity and functionality in mind.
+More features will be added later such as a channel list and descriptions for each channel Mockup of the view page from the broadcasts point of view Mockup of the view page on the viewers side with automatic connection to a broadcaster.
+Software Requirements Specification for ppcast Page Mockup of homepage for ppcast where user can select channel name and begin broadcasting Hardware Interfaces Ppcast will be using the WebRTC API specifically MediaStream to receive data from a users webcam andor microphone.
+MediaStream abstracts the webcam andor microphone complexities from the user.
+Hardware interfaces include desktops laptops and mobile devices which will be abstracted by the users browser and operating system Software Interfaces WebRTC JavaScript framework tools for UI bootstrap websockets and other special tools used for databases Communications Interfaces Communication interfaces will be abstracted by the WebRTC API specifically RTCPeerConnection.
+With RTCPeerConnection a Session Description Protocol SDP hides many of the network and media information from the application.
+This allows communication between two peers that can be designed with a high level approach without worrying about the lower level implementation.
+RTCPeerConnection also has encryption for the data channels and signaling mechanism.
+WebRTC uses DTLS and SRTP for its encryption protocols.
+PPcast also focuses on the ICE framework for connecting two peers directly.
+The ICE framework will first try to connect the peers using UDP with the most minimal latency.
+If UDP fails the ICE framework will try TCP with HTTP and later TCP with HTTPS.
+Finally when a direct connection Software Requirements Specification for ppcast Page does not work ICE will try to use TURN servers to connect peers by adopting a method that requires a third party.
+Functional and Behavior Requirements Use Case View As a broadcaster I want to go to a website and stream my video to other viewers.
+As a viewer I want to go to a website and watch other peoples live streams.
+As a user I want a userfriendly experience.
+As a user I should know whether my web browser is supported.
+As a broadcaster I want to be able to add filters to my broadcast.
+As a broadcaster I want to be able to stream whats coming from my webcam.
+As a broadcaster I want to be able to stream whats on my screen.
+As a broadcaster I want to be able to create a Channel to stream to.
+As a viewer I want to be able to select a channel and see the stream from the channel.
+As a viewer I want to be able to disconnect from a channel and select another channel to view whenever I want.
+As a user I want to be able to communicate with other users in the channel in realtime.
+As a broadcaster I want to be able to stream to a lot of people without using a lot of resources.
+As a broadcaster I want to be able to stream to a few viewers who will rebroadcast my stream to other viewers.
+As a viewer I want to be able to view channels without constraining my bandwidth as a peer.
+As a viewer I want to be able to rebroadcast a stream effectively with little to no technical knowledge.
+As a broadcaster I want the service to be able to intelligently choose which peers will be able to rebroadcast the stream most effectively.
+As a user I want my streams to be interrupted as little as possible when a peer encounters issues Potential Use Case View As a broadcaster I want to be able to select multiple cameras to broadcast from simultaneously.
+As a user I want to be able to use ppcast with the Mozilla Firefox browser.
+As a user I want to be able to register and browse through a list of channels that other users are broadcasting on.
+As a user I would like the option of using a mobile device to view or broadcast content As a user I would like the option of having live chat between broadcasters or viewers Software Requirements Specification for ppcast Page As a broadcaster I would like the option of sharing my computer screen as a video source to viewers while simultaneously broadcasting from a webcam.
+Creating a new channel as a broadcaster should happen immediately taking no more than seconds.
+Joining an existing channel should happen quickly a live video stream shall begin within seconds.
+Sudden and unexpected peer disconnections should trigger a new connection to another peer and begin streaming again within seconds.
+Planned peer disconnections ex user leaving channel page and other peer notified shall be handled gracefully and minimize stream disruptions and begin streaming again within seconds.
+Peers shall be able to handle rebroadcasting to at least other peers using recent Apple MacBook Pros for baseline performance of this function which is mainly bottlenecked by browser implementations of WebRTC and video odingtranscoding.
+Safety and Security Requirements Safety Use of the broadcast service should be done ethically and morally Broadcasters shall know when their camera is broadcasting live Assume any broadcast potentially be recorded by any viewer Security Broadcasters should assume their video stream is not private to anyone that has the channel name Communications between peers is encrypted with DTLSSRTP as defined in WebRTC Nave denial of service attacks should not be possible For instance peers could degrade stre
+Software Quality Attributes Adaptability Peers will attempt to modify bandwidth requirements in the face of changing network conditions or for lowbandwidth connections such as mobile Channel concept will be an overlay over ppcasts peertopeer network allowing for the core signaling functions to be arate Availability Any user access the service to broadcast or view broadcasts via the website Serverside software will not have any unusual requirements allowing for deployment in many environments Correctn
+talk about clientside and serverside portability Reliability The ppcast server will attempt to make sure a peer always has a connection to another peer in the network Lower quality connections will be attempted to be detected and resolved automatically with a different peer connection Navigation between different channels should be a normal operation and not cause undue interruption to peers you are rebroadcasting to Reusability The WebRTC API was designed in mind to be reusable which is the core of t
+The user interface should be intuitive with minimal user set up.
+Conflict Change exclusion set Monitor the meeting Change preference set Conflict Conflict Change location Planning of meeting Cancel meeting External constraints Replanning the meeting Application domain Conflict resolution Check resolution policies Participant interactions Make communication reliable Communicate request Replies Awareness during planning process Support negotiation and conflict 
+To monitor the meeting The system will create the log of all the messages exchanged between the participants so that its easy for meeting initiator to monitor the meeting planning proceedings.
+When planning meetings the system shall take into account all constraints that are expressed by the meeting participants Every constraint expressed by a participant shall be added to a participants preferences set.
+Each date that the meeting participant can attend shall be added to the preference set Each date that the meeting participant cannot attend shall be added to the exclusion set If a user changes their constraints the SDMS shall rearrange the meeting to accommodate this change The users preference set exclusion set and preferred location shall be changed before a meeting datelocation is proposed by the meeting initiator.
+External constraints shall be considered after a meeting date and location have been proposed.
+For example if a high priority meeting needs to be accommodated a lower priority meeting be changed or cancelled or If a geographical disaster occurs which need to reschedule the meeting then the proposed meeting is cancelled.
+Conflict resolution shall be supported according to policies that have been stated by the client.
+All interactions between the meeting participants will be managed.
+There shall be means to communicate the message by participant.
+There shall be provision to invoke the participants not taking part in communication.
+The process of negotiation will also be managed.
+Moreover the reliability of communication will be monitored.
+The system should be usable by the nonexperts.
+The user should be able to operate on the functionality easily.
+The elapsed time between the user sending request for meeting and the date and location set should be minimal i.e.
+the user should not wonder whether he has submitted the request or not.
+Lower bound should be fixed between determination of meeting date and actual meeting EXTENSIBILITY The system should be able to handle explicit priorities among dates in preference sets.
+It should handle explicit dependencies between meeting date and meeting location.
+The system should provide provision to participant for his replacement by other person at the meeting.
+PRIVACY Privacy rules should be enforced a nonprivileged participant should not be aware of constraints stated by other participants.
+The system should accommodate as much entralized requests as possible.
+Therefore any authorized user should be able to request a meeting independently of hisher whereabouts CUSTOMIZABLE The system shall be customizable to two ways Private Professional meetings these are characterized by different restrictions on the time period that be allocated e.g.
+meeting during office hours private activities during leisure time.
+FLEXIBLE Rescheduling of a meeting should be done dynamically and with as much flexibility as possible.
+Also the system should be flexible enough to accommodate evolving data e.g.
+the sets of concerned participants be varying the address at which a participant can be reached be varying etc ACCURACYthe meetings should be monitored accurately especially when the meeting is carried out in a distributed manner.

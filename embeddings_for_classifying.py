@@ -5,10 +5,10 @@ import utils
 import ast
 
 
-n_gram = '1_gray'
-bin_word_size = 12
-n_gram_n = 1
-
+n_gram = '4_gray'
+bin_word_size = 11
+n_gram_n = 4
+vocab_size = 1979
 binary_embedding_size = bin_word_size * int(n_gram_n)
 problem = 'software_requirements/no_stopwords'
 
@@ -22,7 +22,7 @@ else:
     preprocessed_df = utils.preprocessing(df, 'plus')
 
 # construct the lambda grams for each sentence
-l_grams = utils.get_lambda_grams(preprocessed_df, 4, classify=True)
+l_grams = utils.get_lambda_grams(preprocessed_df, n_gram_n, classify=True)
 
 l_grams_df = pd.DataFrame({'n_grams': l_grams})
 df[f'{n_gram}_grams'] = l_grams_df
@@ -58,8 +58,9 @@ def fix_vector_length(vec, target_len):
         return vec + [0.0] * (target_len - len(vec))
     return vec
 
-autoencoder = Autoencoder(binary_embedding_size, binary_embedding_size)
-model = autoencoder.load_model(f'assets/models/{problem}/{n_gram}_grams/model_{n_gram}.h5')
+
+autoencoder = Autoencoder(input_size=binary_embedding_size, input_neurons=binary_embedding_size, vocab_size=vocab_size, n_gram=n_gram_n, bits_per_token=bin_word_size)
+model = autoencoder.load_model(f'assets/models/{problem}/{n_gram}_grams/model_{n_gram}.h5', vocab_size=vocab_size, bits_per_token=bin_word_size)
 encode = autoencoder.encode()
 
 bin_grams = df[f'{n_gram}_gram_binary'].to_list()
@@ -108,7 +109,7 @@ df_train = pd.read_csv(f'data/{problem}/train_df.csv')
 df_test = pd.read_csv(f'data/{problem}/test_df.csv')
 df_val = pd.read_csv(f'data/{problem}/val_df.csv')
 
-cols_to_add = ['text', '1_gray_gram_embeddings']
+cols_to_add = ['text', '4_gray_gram_embeddings']
 df_subset = df[cols_to_add]
 
 df_train = df_train.merge(df_subset, on='text', how='left')
@@ -119,7 +120,7 @@ df_train.to_csv(f'data/{problem}/train_df.csv', index=False)
 df_test.to_csv(f'data/{problem}/test_df.csv', index=False)
 df_val.to_csv(f'data/{problem}/val_df.csv', index=False)
 
-
+exit()
 # import pandas as pd
 # import numpy as np
 # from autoencoder.nn import Autoencoder
