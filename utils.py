@@ -40,7 +40,7 @@ def split_data(df, output_folder, binary_embeddings_file,
 
     if not semantic:
         X_train, X_test, y_train, y_test = train_test_split(
-            df, df, test_size=test_size, random_state=random_state)
+            emb_df, emb_df, test_size=test_size, random_state=random_state)
         X_train, X_val, y_train, y_val = train_test_split(
             X_train, y_train, test_size=0.20, random_state=random_state)
 
@@ -186,7 +186,7 @@ def binary_to_ngrams(binary_embedding, ind, n_gram, vocab_to_binary, bits=None, 
 
 #Uploading the data
 def upload_data_to_train(file_name, column):
-    df = pd.read_csv(file_name, dtype={"embedding": str})
+    df = pd.read_csv(file_name, dtype=str)
     return np.vstack(df[column].apply(lambda x: np.array(list(x), dtype=float)).values)
 
 def upload_vocab_to_binary_dictionary(file='binary_dict_karina.csv', columns=['word', 'binary']):
