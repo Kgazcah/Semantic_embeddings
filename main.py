@@ -49,10 +49,10 @@ utils.split_data(
 X_train = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/X_train.csv', 'X_emb')
 X_test = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/X_test.csv', 'X_emb')
 X_val = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/X_val.csv', 'X_emb')
-y_train = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/y_train.csv', 'y_emb')
-y_test = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/y_test.csv', 'y_emb')
-y_val = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/y_val.csv', 'y_emb')
-# y_train, y_test, y_val = X_train, X_test, X_val
+# y_train = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/y_train.csv', 'y_emb')
+# y_test = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/y_test.csv', 'y_emb')
+# y_val = utils.upload_data_to_train(f'data/{problem}/{n_gram}_grams/y_val.csv', 'y_emb')
+y_train, y_test, y_val = X_train, X_test, X_val
 
 dictionary = utils.upload_vocab_to_binary_dictionary(file=f'assets/method/{problem}/vocab_to_binary.csv')
 # # # ##################### Step 8: Creating and training the Neural Network (Autoencoder)
