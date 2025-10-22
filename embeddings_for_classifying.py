@@ -6,13 +6,16 @@ import ast
 
 
 n_gram = '4_gray'
-bin_word_size = 11
+bin_word_size = 16
 n_gram_n = 4
-vocab_size = 1979
 binary_embedding_size = bin_word_size * int(n_gram_n)
-problem = 'software_requirements/no_stopwords'
+problem = 'spam/no_stopwords'
+_vocab = pd.read_csv(f'assets/method/{problem}/vocabulary.csv')
+topic = 'dataset_spam'
+vocab_size = _vocab.shape[0]
+loss = 'lacs'
 
-df = pd.read_csv(f'data/{problem}/dataset_ngrams.csv')
+df = pd.read_csv(f'data/{problem}/{topic}.csv')
 
 ######################## Adding the lambda grams
 # preprocessing the dataset
@@ -59,7 +62,7 @@ def fix_vector_length(vec, target_len):
     return vec
 
 
-autoencoder = Autoencoder(input_size=binary_embedding_size, input_neurons=binary_embedding_size, vocab_size=vocab_size, n_gram=n_gram_n, bits_per_token=bin_word_size)
+autoencoder = Autoencoder(input_size=binary_embedding_size, input_neurons=binary_embedding_size, vocab_size=vocab_size, n_gram=n_gram_n, bits_per_token=bin_word_size, loss=loss)
 model = autoencoder.load_model(f'assets/models/{problem}/{n_gram}_grams/model_{n_gram}.h5', vocab_size=vocab_size, bits_per_token=bin_word_size)
 encode = autoencoder.encode()
 
@@ -102,7 +105,7 @@ embeddings_df = pd.DataFrame({f'{n_gram}_gram_embeddings': sentences_embeddings}
 print(embeddings_df)
 df[f'{n_gram}_gram_embeddings'] = embeddings_df
 df.to_csv(f'data/{problem}/dataset_ngrams.csv', index=False)
-
+exit()
 ############################ Adding my embeddings to yuri's embeddings
 
 df_train = pd.read_csv(f'data/{problem}/train_df.csv')

@@ -33,7 +33,7 @@ vocab_size = len(word_to_bin)
 
 #getting the lambda grams to binary embeddings
 utils.lambda_grams_to_binary(word_to_bin, l_grams, f'assets/bin_embeddings/{problem}/{n_gram}_grams/binary_embeddings.csv')
-exit()
+# exit()
 ################## Splitting into training and testing data 
 
 utils.split_data(
